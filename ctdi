@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+View="";
+if [ "$#" -eq 1 ]; then
+    View=`/usr/atria/bin/cleartool pwv | grep "Working" | cut -d : -f 2 | cut -d " " -f 2`
+elif [ "$#" -eq 2 ]; then
+    View=$2
+fi
+SRC=`/usr/atria/bin/cleartool lsco -l -r -me | grep $1 | grep $View | sed 's/.*from //' | sed 's/ (reserved)//'`
+if [ -z $SRC ]; then
+    echo "This file isn't checked out"
+else
+    cdiff "$1@@"$SRC $1
+fi

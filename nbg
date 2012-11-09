@@ -1,0 +1,6 @@
+#!/bin/bash
+rUser="apham"
+rHost="10.128.3.42"
+rView=`echo $CLEARCASE_ROOT | sed -e "s/$USER/$rUser/g"`
+filename=`readlink -f $1`
+rsync --rsync-path=/usr/local/bin/rsync $filename $rUser"@"$rHost:$rView$filename

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+YELLOW=`echo -e '\033[0m\033[33m'`
+NORMAL=`echo -e '\033[0m'`
+curl "http://www.commandlinefu.com/commands/matching/$@/$(echo -n $@ | openssl base64)/plaintext"| sed 's/^'"$@"'.*/'"$YELLOW"'&'"$NORMAL"'/g'

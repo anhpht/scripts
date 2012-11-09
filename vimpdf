@@ -1,0 +1,12 @@
+#!/bin/bash
+
+fullFileName=$1
+fileName=${fullFileName##*/}
+tmpFile="/tmp/"${USER}"_"$fileName
+psFile="/tmp/${USER}_output.ps"
+
+cp $fullFileName $tmpFile
+vim +"hardcopy > $psFile" +q $tmpFile
+sed -i 's:'$tmpFile'::g' $psFile
+ps2pdf $psFile ${fileName}".pdf"
+rm $psFile $tmpFile

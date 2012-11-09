@@ -1,0 +1,11 @@
+#!/bin/bash
+
+manName=$1
+manFile="/tmp/"$manName"_"${USER}
+psFile="/tmp/output_${USER}.ps"
+
+man $1 > $manFile
+vim +"set ft=man" +"hardcopy > $psFile" +q $manFile
+sed -i 's:'$manFile'::g' $psFile
+ps2pdf $psFile ${manName}".pdf"
+rm $manFile $psFile

@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+cd $HOME/kscope/oam
+find /uvobs/1btsumcoam/ -type f -name '*.c' -o -name '*.h' -o -name '*.cc' -o -name '*.cpp' -o -name '*.cxx' -o -name '*.C' -o -name '*.hh' -o -name '*.hpp' -o -name '*.hxx' -o -name '*.H' > $HOME/kscope/oam/cscope.files
+find /uvobs/1btsumc/ -type f -name '*.c' -o -name '*.h' -o -name '*.cc' -o -name '*.cpp' -o -name '*.cxx' -o -name '*.C' -o -name '*.hh' -o -name '*.hpp' -o -name '*.hxx' -o -name '*.H' >> $HOME/kscope/oam/cscope.files
+find /uvobs/1btsmcr/ -type f -name '*.c' -o -name '*.h' -o -name '*.cc' -o -name '*.cpp' -o -name '*.cxx' -o -name '*.C' -o -name '*.hh' -o -name '*.hpp' -o -name '*.hxx' -o -name '*.H' >> $HOME/kscope/oam/cscope.files
+find /uvobs/1btsptf/ -type f -name '*.c' -o -name '*.h' -o -name '*.cc' -o -name '*.cpp' -o -name '*.cxx' -o -name '*.C' -o -name '*.hh' -o -name '*.hpp' -o -name '*.hxx' -o -name '*.H' >> $HOME/kscope/oam/cscope.files
+find /uvobs/1btsumccp/ -type f -name '*.c' -o -name '*.h' -o -name '*.cc' -o -name '*.cpp' -o -name '*.cxx' -o -name '*.C' -o -name '*.hh' -o -name '*.hpp' -o -name '*.hxx' -o -name '*.H' >> $HOME/kscope/oam/cscope.files
+/uvobs/tools/local/bin/cscope -b
