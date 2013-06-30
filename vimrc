@@ -5,7 +5,7 @@ set hlsearch
 set hid
 set laststatus=2
 set statusline=\ %F%m%r%h\ %w\ \ \ Line:\ %l/%L:%c
-set pt=<f9>
+set pt=<f5>
 set encoding=utf-8
 set nocompatible           "no compatiple with vi
 set ignorecase

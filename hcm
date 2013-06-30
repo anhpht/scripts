@@ -1,6 +1,0 @@
-#!/bin/bash
-rUser="anhphamt"
-rHost="10.128.241.21"
-rView=`echo $CLEARCASE_ROOT | sed -e "s/$USER/$rUser/g"`
-filename=`readlink -f $1`
-rsync  -e 'ssh -c arcfour' --rsync-path=/usr/local/bin/rsync $filename $rUser"@"$rHost:$rView$filename

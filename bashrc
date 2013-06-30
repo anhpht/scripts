@@ -27,11 +27,11 @@ PATH=$PATH":/usr/sbin"
 PATH=$PATH":/usr/local/bin"
 PATH=$PATH":/usr/local/sbin"
 PATH=$PATH":~/.gem/ruby/1.9.1/bin"
+PATH=$PATH":~/.gem/ruby/2.0.0/bin"
 PATH=$PATH":/usr/bin/core_perl"
 PATH=$PATH":/opt/pyshell/bin"
 
 export PATH
-#export MANPATH="/usr/local/ch7.0.0/docs/man"
 export MANPAGER="/usr/bin/most -s"
 export LANG=en_US.UTF-8
 export EDITOR=vim
@@ -66,19 +66,26 @@ if [ -e $PYSHELL_ROOT ]; then
     export SYNC_HOME=~/Dropbox/
 fi
 
-PS1="$B_YELLOW\u$B_GREY@$B_GREEN\h$B_BLUE: $B_RED\w$B_BLUE \n$B_BLUE($B_RED\t$B_BLUE)\$ $NORMAL"
+PS1="$B_YELLOW\u$B_GREY@$B_GREEN\h$B_BLUE: $B_RED\w$B_BLUE \n$B_BLUE($B_RED\t$B_YELLOW[$SHLVL]$B_BLUE)\$ $NORMAL"
 case `cat /etc/issue` in
     Ubuntu*)
         source /usr/share/autojump/autojump.bash;;
     Arch*)
-        source /etc/profile.d/autojump.bash;;
+        if [[ -f /usr/etc/profile.d/autojump.bash ]]; then
+            source /usr/etc/profile.d/autojump.bash
+        elif [[ -f /etc/profile.d/autojump.bash ]]; then
+            source /etc/profile.d/autojump.bash
+        fi;;
     *);;
 esac
-source ~/.bash_completion
+if [[ -f $HOME/.bash_completion ]]; then
+    source ~/.bash_completion
+fi
 ulimit -c unlimited
 if [ -n "$DISPLAY" ] && [ -x /usr/bin/xclip ] ; then
     bind '"\C-x\C-m": set-mark'
     bind 'Control-v: "#\C-b\C-k#\C-x\C-?\"$(xclip -o -selection c)\"\e\C-e\C-x\C-m\C-a\C-y\C-?\C-e\C-y\ey\C-x\C-x\C-d"'
 fi
-function sshlog () { ssh $@ 2>&1 | tee -a ~/tmp/sshlogs/$(date +%Y%m%d_${RANDOM}).log; }
-alias ssh=sshlog
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+PATH=$PATH:$HOME/.gem/ruby/2.0.0/bin
