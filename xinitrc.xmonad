@@ -5,7 +5,6 @@ export XMODIFIERS='@im=uim' # Instructs XIM to use uim
 
 #xhost + &
 xsetroot -cursor_name left_ptr
-#~/bin/startup &
 xrdb -merge $HOME/.Xdefaults
 
 #Terminal
@@ -40,17 +39,17 @@ if [[ -f /usr/bin/mpd ]] && [[ "$(lsof -i :6600)" = "" ]]; then
     /usr/bin/mpd &
 fi
 
-#if [[ -f /usr/bin/pidgin ]]; then
-#    /usr/bin/pidgin &
-#fi
-#
-#if [[ -f /usr/bin/skype ]]; then
-#    /usr/bin/skype &
-#fi
-#
-#if [[ -f /usr/bin/thunderbird ]]; then
-#    /usr/bin/thunderbird &
-#fi
+if [[ -f /usr/bin/pidgin ]]; then
+    /usr/bin/pidgin &
+fi
+
+if [[ -f /usr/bin/skype ]]; then
+    /usr/bin/skype &
+fi
+
+if [[ -f /usr/bin/thunderbird ]]; then
+    /usr/bin/thunderbird &
+fi
 
 if [[ -f /usr/bin/urxvtc ]]; then
     /usr/bin/urxvtc &
