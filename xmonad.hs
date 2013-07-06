@@ -1,106 +1,244 @@
+-- Imports {{{
 import XMonad
-import XMonad.Config.Azerty
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageDocks
-import XMonad.Util.Run(spawnPipe)
-import XMonad.Util.EZConfig
-import Graphics.X11.ExtraTypes.XF86
-import XMonad.Layout.Spacing
-import XMonad.Layout.NoBorders(smartBorders)
-import XMonad.Layout.PerWorkspace
-import XMonad.Layout.IM
-import XMonad.Layout.Grid
---import XMonad.Actions.GridSelect
-import Data.Ratio ((%))
-import XMonad.Actions.CycleWS
-import qualified XMonad.StackSet as W
+-- Prompt
+import XMonad.Prompt
+import XMonad.Prompt.RunOrRaise (runOrRaisePrompt)
+import XMonad.Prompt.AppendFile (appendFilePrompt)
+-- Hooks
+import XMonad.Operations
 import System.IO
-myWorkspaces  = ["1:main","2:chat","3:trades","4:Pidgin","5:graphic","6:files", "7:media"]
-myLayout = onWorkspace "4:Pidgin" pidginLayout $ onWorkspaces ["2:chat", "7:media"] nobordersLayout $ tiled1 ||| Mirror tiled1 ||| nobordersLayout
- where
-  tiled1 = spacing 5 $ Tall nmaster1 delta ratio
-  --tiled2 = spacing 5 $ Tall nmaster2 delta ratio
-  nmaster1 = 1
-  nmaster2 = 2
-  ratio = 2/3
-  delta = 3/100
-  nobordersLayout = smartBorders $ Full
-  gridLayout = spacing 8 $ Grid
-  --gimpLayout = withIM (0.20) (Role "gimp-toolbox") $ reflectHoriz $ withIM (0.20) (Role "gimp-dock") Full
-  pidginLayout = withIM (18/100) (Role "buddy_list") gridLayout
-myManageHook = composeAll
-     [ className =? "File Operation Progress"   --> doFloat
-     , resource =? "desktop_window" --> doIgnore
-     , className =? "xfce4-notifyd" --> doIgnore
-     --, className =? "Iron" --> doShift "1:main"
-     , className =? "Firefox" --> doShift "3:trades"
-     , className =? "Xchat" --> doShift "2:chat"
-     , className =? "Pidgin" --> doShift "4:Pidgin"
-     , className =? "Shotwell" --> doShift "5:graphic"
-     --, className =? "Gimp" --> doShift "5:graphic"
-     --, className =? "Vlc" --> doShift "7:media"
-     --, className =? "Minitube" --> doShift "7:media"
-     ]
+import System.Exit
+import XMonad.Util.Run
+import XMonad.Actions.CycleWS
+
+import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.SetWMName
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.UrgencyHook
+import XMonad.Hooks.FadeInactive
+import XMonad.Hooks.EwmhDesktops
+
+import XMonad.Layout.NoBorders (smartBorders, noBorders)
+import XMonad.Layout.PerWorkspace (onWorkspace, onWorkspaces)
+import XMonad.Layout.Reflect (reflectHoriz)
+import XMonad.Layout.IM
+import XMonad.Layout.SimpleFloat
+import XMonad.Layout.Spacing
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.LayoutHints
+import XMonad.Layout.LayoutModifier
+import XMonad.Layout.Grid
+
+import Data.Ratio ((%))
+import qualified XMonad.StackSet as W
+import qualified Data.Map as M
+--}}}
+
+-- Config {{{
+-- Define Terminal
+myTerminal      = "/usr/bin/urxvtc"
+-- Define modMask
+modMask' :: KeyMask
+modMask' = mod4Mask
+-- Define workspaces
+myWorkspaces    = ["1:main","2:web","3:chat","4:docs","5:others"]
+-- Dzen/Conky
+myXmonadBar = "dzen2 -x '1440' -y '0' -h '24' -w '640' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E'"
+--myStatusBar = "conky -c /home/fta/.xmonad/.conky_dzen | dzen2 -x '2080' -w '1040' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
+myBitmapsDir = "/home/fta/.xmonad/dzen2"
+--}}}
+-- Main {{{
 main = do
-  xmproc <- spawnPipe "/usr/bin/xmobar /home/lulz/scripts/xmobarrc"
-  --spawn "xcompmgr -Cf"
-  xmonad $ azertyConfig
-    { manageHook = manageDocks <+> myManageHook -- make sure to include myManageHook definition from above
-            <+> manageHook defaultConfig
-    , layoutHook = avoidStruts $ myLayout
-    , logHook = dynamicLogWithPP xmobarPP
-            { ppOutput = hPutStrLn xmproc
-            , ppTitle = xmobarColor "#2CE3FF" "" . shorten 50
-               , ppLayout = const "" -- to disable the layout info on xmobar
-            }
-    , modMask = mod4Mask
-     , workspaces     = myWorkspaces
-    , normalBorderColor = "#60A1AD"
-    , focusedBorderColor = "#68e862"
-     , borderWidth    = 2
-    }`additionalKeys`
-     [ ((controlMask, xK_space), spawn "exe=`dmenu_run -b -nb black -nf yellow -sf yellow` && eval \"exec $exe\"") -- spawn dmenu
-     , ((mod4Mask, xK_Return), spawn "terminator") -- spawn terminator terminal
-     , ((mod4Mask, xK_w), spawn "firefox --private") -- firefox browser in porn mode
-     , ((mod1Mask, xK_F4), kill) -- to kill app
-     , ((mod4Mask, xK_x), spawn "xchat")
-     , ((mod4Mask, xK_f), spawn "thunar")
-     , ((0, xK_Help), spawn "/home/lulz/scripts/xmonad.open") -- hit a button to open the xmonad.hs file
-     , ((mod4Mask, xK_m), spawn "/home/lulz/scripts/mpd.run") -- hit a button to run mpd with ncmpcpp
-     , ((mod4Mask .|. shiftMask, xK_F4), spawn "sudo shutdown -h now") -- to shutdown
-     , ((mod4Mask .|. shiftMask, xK_r), spawn "sudo reboot") -- to restart
-     , ((controlMask, xK_p), spawn "ncmpcpp toggle") -- play/pause mpd
-     , ((0, xF86XK_AudioLowerVolume), spawn "amixer set Master 3%-") -- decrease volume
-     , ((0, xF86XK_AudioRaiseVolume), spawn "amixer set Master 3%+") -- increase volume
-     , ((mod4Mask .|. shiftMask, xK_l), spawn "slimlock")
-     , ((0, xF86XK_AudioMute), spawn "amixer set Master toggle") -- mute volume
-    , ((controlMask .|. shiftMask, xK_Right), spawn "ncmpcpp next") -- play next song in mpd
-    , ((controlMask .|. shiftMask, xK_Left), spawn "ncmpcpp prev") -- play previous song
-     , ((mod4Mask, xK_a ), windows W.swapUp) -- swap up window
-     , ((mod4Mask, xK_z ), windows W.swapDown) -- swap down window
-     , ((mod4Mask, xK_KP_Add ), sendMessage (IncMasterN 1)) -- increase the number of window on master pane
-     , ((mod4Mask, xK_KP_Subtract ), sendMessage (IncMasterN (-1))) -- decrease the number of window
-     , ((controlMask,        xK_Right   ), sendMessage Expand) -- expand master pane
-     , ((controlMask,        xK_Left   ), sendMessage Shrink) -- shrink master pane
-     , ((controlMask, xK_Print), spawn "sleep 0.2; scrot -s") -- capture screenshot of focused window
-    , ((0, xK_Print), spawn "scrot") -- capture screenshot of full desktop
-     , ((0, xF86XK_HomePage), spawn "iron") -- run iron
-     , ((mod4Mask, xK_p), spawn "/home/lulz/scripts/pidgin.open")
-     ]`removeKeys`     -- keys to remove
-     [ (mod4Mask .|. shiftMask, xK_c)
-    , (mod4Mask .|. shiftMask, xK_j)
-     , (mod4Mask .|. shiftMask, xK_k)
-     , (mod4Mask, xK_j)
-     , (mod4Mask, xK_k)
-     , (mod4Mask, xK_h)
-     , (mod4Mask, xK_l)
-     , (mod4Mask, xK_comma)
-     , (mod4Mask, xK_period)
-     ]`additionalMouseBindings`
-     [--((mod4Mask, button4),\_-> nextWS)
-     --,((mod4Mask, button5),\_-> prevWS)
-     ((mod4Mask, button4),\_-> spawn "amixer set Master 3%+")
-     ,((mod4Mask, button5),\_-> spawn "amixer set Master 3%-")
-     ,((mod4Mask, button3),\_-> return())
-     ,((mod4Mask, button1),\_-> return())
-     ]
+    dzenLeftBar <- spawnPipe myXmonadBar
+--    dzenRightBar <- spawnPipe myStatusBar
+    xmonad $ defaultConfig
+      {
+--        startupHook         = execScriptHook "~/bin/startup"
+        terminal            = myTerminal,
+        workspaces          = myWorkspaces,
+        keys                = keys',
+        modMask             = modMask',
+        layoutHook          = layoutHook',
+        manageHook          = manageHook',
+        logHook             = myLogHook dzenLeftBar >> fadeInactiveLogHook 0xdddddddd,
+        normalBorderColor   = colorNormalBorder,
+        focusedBorderColor  = colorFocusedBorder,
+        borderWidth         = 2
+      }
+--}}}
+
+
+-- Hooks {{{
+-- ManageHook {{{
+manageHook' :: ManageHook
+manageHook' = (composeAll . concat $
+    [ [resource     =? r            --> doIgnore            |   r   <- myIgnores] -- ignore desktop
+    , [className    =? c            --> doShift  "1:main"   |   c   <- myDev    ] -- move dev to main
+    , [className    =? c            --> doShift  "2:web"    |   c   <- myWebs   ] -- move webs to web
+    , [className    =? c            --> doShift  "3:chat"   |   c   <- myChat   ] -- move chat to chat
+    , [className    =? c            --> doShift  "4:docs"   |   c   <- myDocs   ] -- move documents to documents
+    , [className    =? c            --> doShift  "5:others" |   c   <- myOthers ] -- move others to others
+    , [className    =? c            --> doCenterFloat       |   c   <- myFloats ] -- float my floats
+    , [name         =? n            --> doCenterFloat       |   n   <- myNames  ] -- float my names
+    , [isFullscreen                 --> myDoFullFloat                           ]
+    ])
+
+    where
+        role      = stringProperty "WM_WINDOW_ROLE"
+        name      = stringProperty "WM_NAME"
+        -- classnames
+        myFloats  = ["Xmessage", "XFontSel", "Wicd Network Manager", "Emacs", "Gvim", "Gedit", "Komodo Edit", "meld", "thunar", "feh"]
+        myWebs    = ["Firefox", "Google-chrome", "Chromium", "Chromium-browser"]
+        myOthers  = ["Vlc", "Gimp", "VirtualBox", "realvnc-viewer"]
+        myChat    = ["Pidgin", "Buddy List", "Skype", "Thunderbird"]
+        myDev     = ["urxvtc", "konsole", "gnome-terminal"]
+        myDocs    = ["Evince", "docx", "libreoffice-startcenter", "libreoffice-writer", "libreoffice-calc", "libreoffice-impress", "libreoffice-draw", "Xpdf"]
+
+        -- resources
+        myIgnores = ["desktop", "desktop_window", "notify-osd", "stalonetray", "trayer"]
+
+        -- names
+        myNames   = ["bashrun"]
+
+-- a trick for fullscreen but stil allow focusing of other WSs
+myDoFullFloat :: ManageHook
+myDoFullFloat = doF W.focusDown <+> doFullFloat
+-- }}}
+layoutHook'  =  onWorkspaces ["1:main","5:others"] customLayout $
+                onWorkspaces ["3:chat"] customLayout $
+                customLayout2
+
+--Bar
+myLogHook :: Handle -> X ()
+myLogHook h = dynamicLogWithPP $ defaultPP
+    {
+        ppCurrent           =   dzenColor "#ebac54" "#1B1D1E" . pad
+      , ppVisible           =   dzenColor "white" "#1B1D1E" . pad
+      , ppHidden            =   dzenColor "white" "#1B1D1E" . pad
+      , ppHiddenNoWindows   =   dzenColor "#7b7b7b" "#1B1D1E" . pad
+      , ppUrgent            =   dzenColor "#ff0000" "#1B1D1E" . pad
+      , ppWsSep             =   " "
+      , ppSep               =   "  |  "
+      , ppLayout            =   dzenColor "#ebac54" "#1B1D1E" .
+                                (\x -> case x of
+                                    "ResizableTall"             ->      "^i(" ++ myBitmapsDir ++ "/tall.xbm)"
+                                    "Mirror ResizableTall"      ->      "^i(" ++ myBitmapsDir ++ "/mtall.xbm)"
+                                    "Full"                      ->      "^i(" ++ myBitmapsDir ++ "/full.xbm)"
+                                    "Simple Float"              ->      "~"
+                                    _                           ->      x
+                                )
+      , ppTitle             =   (" " ++) . dzenColor "white" "#1B1D1E" . dzenEscape
+      , ppOutput            =   hPutStrLn h
+    }
+
+-- Layout
+--- customLayout = avoidStruts $ tiled ||| Mirror tiled ||| Full ||| simpleFloat
+customLayout = avoidStruts $ tiled ||| Mirror tiled ||| Full
+  where
+    tiled   = ResizableTall 1 (2/100) (34/55) []
+
+customLayout2 = avoidStruts $ Full ||| tiled ||| Mirror tiled ||| simpleFloat
+  where
+    tiled   = ResizableTall 1 (2/100) (1/2) []
+
+-- imLayout    = avoidStruts $ withIM (1%5) (And (ClassName "Pidgin") (Role "buddy_list")) Grid
+--}}}
+-- Theme {{{
+-- Color names are easier to remember:
+colorOrange         = "#FD971F"
+colorDarkGray       = "#1B1D1E"
+colorPink           = "#F92672"
+colorGreen          = "#A6E22E"
+colorBlue           = "#66D9EF"
+colorYellow         = "#E6DB74"
+colorWhite          = "#CCCCC6"
+
+colorNormalBorder   = "#CCCCC6"
+colorFocusedBorder  = "#fd971f"
+
+
+barFont  = "terminus"
+barXFont = "inconsolata:size=12"
+xftFont = "xft: inconsolata-14"
+--}}}
+
+-- Prompt Config {{{
+mXPConfig :: XPConfig
+mXPConfig =
+    defaultXPConfig { font                  = barFont
+                    , bgColor               = colorDarkGray
+                    , fgColor               = colorGreen
+                    , bgHLight              = colorGreen
+                    , fgHLight              = colorDarkGray
+                    , promptBorderWidth     = 0
+                    , height                = 14
+                    , historyFilter         = deleteConsecutive
+                    }
+
+-- Run or Raise Menu
+largeXPConfig :: XPConfig
+largeXPConfig = mXPConfig
+                { font = xftFont
+                , height = 22
+                }
+-- }}}
+-- Key mapping {{{
+keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
+    [ ((modMask,                    xK_p        ), runOrRaisePrompt largeXPConfig)
+    , ((modMask .|. shiftMask,      xK_Return   ), spawn $ XMonad.terminal conf)
+    , ((modMask,                    xK_F2       ), spawn "/usr/bin/gmrun")
+    , ((modMask .|. shiftMask,      xK_c        ), kill)
+    , ((modMask .|. shiftMask,      xK_l        ), spawn "/usr/bin/xscreensaver-command -lock")
+    -- Programs
+    , ((0,                          xK_Print    ), spawn "/usr/bin/scrot -e 'mv $f ~/screenshots/'")
+    , ((modMask,                    xK_o        ), spawn "/usr/bin/chromium")
+    , ((modMask,                    xK_m        ), spawn "/usr/bin/thunar /mnt/data")
+    , ((modMask,                    xK_v        ), spawn "/usr/bin/virtualbox")
+    -- Media Keys
+    , ((0,                          0x1008ff12  ), spawn "amixer -q sset Headphone toggle")       -- XF86AudioMute
+    , ((0,                          0x1008ff11  ), spawn "amixer -q sset Headphone 5%-")   -- XF86AudioLowerVolume
+    , ((0,                          0x1008ff13  ), spawn "amixer -q sset Headphone 5%+")   -- XF86AudioRaiseVolume
+
+    -- layouts
+    , ((modMask,                    xK_space    ), sendMessage NextLayout)
+    , ((modMask .|. shiftMask,      xK_space    ), setLayout $ XMonad.layoutHook conf)          -- reset layout on current desktop to default
+    , ((modMask,                    xK_b        ), sendMessage ToggleStruts)
+    , ((modMask,                    xK_n        ), refresh)
+    , ((modMask,                    xK_Tab      ), windows W.focusDown)                         -- move focus to next window
+    , ((modMask,                    xK_j        ), windows W.focusDown)
+    , ((modMask,                    xK_k        ), windows W.focusUp  )
+    , ((modMask .|. shiftMask,      xK_j        ), windows W.swapDown)                          -- swap the focused window with the next window
+    , ((modMask .|. shiftMask,      xK_k        ), windows W.swapUp)                            -- swap the focused window with the previous window
+    , ((modMask,                    xK_Return   ), windows W.swapMaster)
+    , ((modMask,                    xK_t        ), withFocused $ windows . W.sink)              -- Push window back into tiling
+    , ((modMask,                    xK_h        ), sendMessage Shrink)                          -- %! Shrink a master area
+    , ((modMask,                    xK_l        ), sendMessage Expand)                          -- %! Expand a master area
+    , ((modMask,                    xK_comma    ), sendMessage (IncMasterN 1))
+    , ((modMask,                    xK_period   ), sendMessage (IncMasterN (-1)))
+
+    -- workspaces
+    , ((modMask .|. controlMask,   xK_Right     ), nextWS)
+    , ((modMask .|. shiftMask,     xK_Right     ), shiftToNext)
+    , ((modMask .|. controlMask,   xK_Left      ), prevWS)
+    , ((modMask .|. shiftMask,     xK_Left      ), shiftToPrev)
+
+    -- quit, or restart
+    , ((modMask .|. shiftMask,      xK_q        ), io (exitWith ExitSuccess))
+    , ((modMask,                    xK_q        ), spawn "killall conky dzen2 && /usr/bin/xmonad --recompile && /usr/bin/xmonad --restart")
+    ]
+    ++
+    -- mod-[1..9] %! Switch to workspace N
+    -- mod-shift-[1..9] %! Move client to workspace N
+    [((m .|. modMask, k), windows $ f i)
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+    ++
+    --
+    -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
+    -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
+    --
+    [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
+        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+--}}}

@@ -1,0 +1,61 @@
+export LC_ALL="en_US.UTF-8"
+export GTK_IM_MODULE='uim'  # Instructs the GTK immodule to use uim
+export QT_IM_MODULE='uim'   # Instructs the Qt immodule to use uim
+export XMODIFIERS='@im=uim' # Instructs XIM to use uim
+
+#xhost + &
+xsetroot -cursor_name left_ptr
+#~/bin/startup &
+xrdb -merge $HOME/.Xdefaults
+
+#Terminal
+if [[ -f /usr/bin/urxvtd ]]; then
+    /usr/bin/urxvtd &
+fi
+
+# vnc server for xrdp local session
+#result=$(lsof -i :5900)
+#if [[ "$result" = "" ]] && [[ -f /usr/bin/x11vnc ]]; then
+#    x11vnc -rfbauth ~/.vnc/passwd -forever -display :0 -o /tmp/x11vnc.log -bg &
+#fi
+
+#Dropbox
+result=$(lsof -i :17500)
+if [[ "$result" = "" ]] && [[ -f /usr/bin/dropboxd ]]; then
+    /usr/bin/dropboxd &
+fi
+
+#uim
+if [[ -f /usr/bin/uim-xim ]] && [[ "$(lsof /usr/bin/uim-xim)" = "" ]]; then
+    /usr/bin/uim-xim &
+fi
+
+#Screen saver
+if [[ -f /usr/bin/xscreensaver ]] && [[ "$(lsof /usr/bin/xscreensaver)" = "" ]]; then
+    /usr/bin/xscreensaver -no-splash &
+fi
+
+#Music player daemon
+if [[ -f /usr/bin/mpd ]] && [[ "$(lsof -i :6600)" = "" ]]; then
+    /usr/bin/mpd &
+fi
+
+#if [[ -f /usr/bin/pidgin ]]; then
+#    /usr/bin/pidgin &
+#fi
+#
+#if [[ -f /usr/bin/skype ]]; then
+#    /usr/bin/skype &
+#fi
+#
+#if [[ -f /usr/bin/thunderbird ]]; then
+#    /usr/bin/thunderbird &
+#fi
+
+if [[ -f /usr/bin/urxvtc ]]; then
+    /usr/bin/urxvtc &
+fi
+
+sudo modprobe vboxdrv
+
+exec xmonad

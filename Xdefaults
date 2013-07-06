@@ -3,7 +3,7 @@
 !URxvt*scrollBar_right:true
 !urxvt*override-redirect:false
 urxvt*perl-lib:             /usr/lib/urxvt/perl/
-urxvt*perl-ext-common:      default,matcher,searchable-scrollback,fullscreen,vtwheel,clipboard,tabbedex,font-size,keyboard-select,url-select
+urxvt*perl-ext-common:      default,matcher,searchable-scrollback,vtwheel,clipboard,font-size,keyboard-select,url-select
 URxvt.scrollBar: false
 urxvt*secondaryScroll:      true
 urxvt*saveLines:            65535
@@ -17,7 +17,7 @@ URxvt.keysym.M-C-v:         perl:clipboard:paste_escaped
 URxvt.keysym.M-Escape:      perl:keyboard-select:activate
 URxvt.keysym.M-s:           perl:keyboard-select:search
 
-URxvt.tabbed.title:         no
+!URxvt.tabbed.title:         no
 
 URxvt.url-select.launcher:  /usr/bin/chromium
 URxvt.url-select.underline: true
@@ -30,11 +30,12 @@ URxvt.colorUL:              purple
 
 URxvt.keysym.C-Up:          perl:font-size:incglobal
 URxvt.keysym.C-Down:        perl:font-size:decglobal
+!URxvt.keysym.F11:           perl:fullscreen:switch
 
-URxvt.tabbed.tabbar-fg:     2
-URxvt.tabbed.tabbar-bg:     0
-URxvt.tabbed.tab-fg:        3
-URxvt.tabbed.tab-bg:        0
+!URxvt.tabbed.tabbar-fg:     2
+!URxvt.tabbed.tabbar-bg:     0
+!URxvt.tabbed.tab-fg:        3
+!URxvt.tabbed.tab-bg:        0
 
 URxvt.font:                 xft:Monospace:style=bold:pixelsize=14
 urxvt*cursorColor:          #DCDCCC
