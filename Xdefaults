@@ -1,44 +1,67 @@
-URxvt.perl-ext-common:      default,clipboard,url-select,keyboard-select,tabbed,tabbedex
-URxvt.url-select.launcher:  chromium
-URxvt.url-select.underline: true
-URxvt.keysym.M-u:           perl:url-select:select_next
+! General
+!urxvt*loginShell:     true
+!URxvt*scrollBar_right:true
+!urxvt*override-redirect:false
+urxvt*perl-lib:             /usr/lib/urxvt/perl/
+urxvt*perl-ext-common:      default,matcher,searchable-scrollback,fullscreen,vtwheel,clipboard,tabbedex,font-size,keyboard-select,url-select
+URxvt.scrollBar: false
+urxvt*secondaryScroll:      true
+urxvt*saveLines:            65535
+urxvt*cursorBlink:          false
+urxvt*urgentOnBell:         true
+
+URxvt.keysym.M-c:           perl:clipboard:copy
+URxvt.keysym.M-v:           perl:clipboard:paste
+URxvt.keysym.M-C-v:         perl:clipboard:paste_escaped
+
 URxvt.keysym.M-Escape:      perl:keyboard-select:activate
 URxvt.keysym.M-s:           perl:keyboard-select:search
-urxvt*keysym.F11:           perl:fullscreen:switch
 
-URxvt.matcher.button:   1
-URxvt.tabbed.tabbar-fg: 2
-URxvt.tabbed.tabbar-bg: 0
-URxvt.tabbed.tab-fg:    3
-URxvt.tabbed.tab-bg:    0
-!URxvt.perl-ext-common:  default,tabbedex
-!URxvt.perl-ext-common:  default,tabbed
-!URxvt.perl-ext-common:  default,matcher
-!URxvt.url-launcher:     /usr/bin/chromium
+URxvt.tabbed.title:         no
 
-URxvt.background: #000000
-URxvt.foreground: #c0c0c0
+URxvt.url-select.launcher:  /usr/bin/chromium
+URxvt.url-select.underline: true
+URxvt.keysym.M-u:           perl:url-select:select_next
+
+URxvt.url-launcher:         /usr/bin/chromium
+URxvt.matcher.button:       1
+URxvt.cutchars:             "\\ `\"\'()*;<>[]{|}&,=?@^\:"
+URxvt.colorUL:              purple
+
+URxvt.keysym.C-Up:          perl:font-size:incglobal
+URxvt.keysym.C-Down:        perl:font-size:decglobal
+
+URxvt.tabbed.tabbar-fg:     2
+URxvt.tabbed.tabbar-bg:     0
+URxvt.tabbed.tab-fg:        3
+URxvt.tabbed.tab-bg:        0
+
+URxvt.font:                 xft:Monospace:style=bold:pixelsize=14
+urxvt*cursorColor:          #DCDCCC
+urxvt*background:           black
+urxvt*foreground:           #00c800
+
 ! black
-URxvt.color0: #000000
-URxvt.color8: #2C2C2C
+URxvt.color0:               #000000
+URxvt.color8:               #2C2C2C
 ! red
-URxvt.color1: #C42B2B
-URxvt.color9: #FF2929
+URxvt.color1:               #C42B2B
+URxvt.color9:               #FF2929
 ! green
-URxvt.color2: #3BD93B
-URxvt.color10: #28FC28
+URxvt.color2:               #3BD93B
+URxvt.color10:              #28FC28
 ! yellow
-URxvt.color3: #E3E336
-URxvt.color11: #FFEA1E
+URxvt.color3:               #E3E336
+URxvt.color11:              #FFEA1E
 ! blue
-URxvt.color4: #4747BB
-URxvt.color12: #2121DE
+URxvt.color4:               #4747BB
+URxvt.color12:              #2121DE
 ! magenta
-URxvt.color5: #CB40CB
-URxvt.color13: #FF00FF
+URxvt.color5:               #CB40CB
+URxvt.color13:              #FF00FF
 ! cyan
-URxvt.color6: #6FD2D2
-URxvt.color14: #00FFFF
+URxvt.color6:               #6FD2D2
+URxvt.color14:              #00FFFF
 ! white
-URxvt.color7: #C0C0C0
-URxvt.color15: #FFFFFF
+URxvt.color7:               #C0C0C0
+URxvt.color15:              #FFFFFF
