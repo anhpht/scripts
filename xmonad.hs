@@ -201,7 +201,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask,                    xK_v        ), spawn "/usr/bin/virtualbox")
     , ((modMask,                    xK_p        ), spawn "/usr/bin/urxvtc -e /usr/bin/ncmpc")
     , ((modMask,                    xK_s        ), spawn "/usr/bin/subl")
-    , ((modMask,                    xK_e        ), spawn "/usr/bin/subl")
+    , ((modMask,                    xK_w        ), spawn "/usr/bin/realvnc-viewer")
     , ((modMask,                    xK_m        ), spawn "/usr/bin/gnome-alsamixer")
 
     -- layouts
