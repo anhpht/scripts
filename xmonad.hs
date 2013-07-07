@@ -45,7 +45,7 @@ modMask' = mod4Mask
 myWorkspaces    = ["1:main","2:web","3:chat","4:docs","5:others"]
 -- Dzen/Conky
 myXmonadBar = "dzen2 -x '1440' -y '0' -h '24' -w '640' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E'"
---myStatusBar = "conky -c /home/fta/.xmonad/.conky_dzen | dzen2 -x '2080' -w '1040' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
+myStatusBar = "conky -c /home/fta/.xmonad/.conky_dzen | dzen2 -x '2080' -w '1000' -h '24' -ta 'r' -fg '#FFFFFF' -y '0'"
 myBitmapsDir = "/home/fta/.xmonad/dzen2"
 --}}}
 -- Main {{{
@@ -54,7 +54,6 @@ main = do
 --    dzenRightBar <- spawnPipe myStatusBar
     xmonad $ defaultConfig
       {
---        startupHook         = execScriptHook "~/bin/startup"
         terminal            = myTerminal,
         workspaces          = myWorkspaces,
         keys                = keys',
@@ -92,8 +91,8 @@ manageHook' = (composeAll . concat $
         myWebs    = ["Firefox", "Google-chrome", "Chromium", "Chromium-browser"]
         myOthers  = ["Vlc", "Gimp", "VirtualBox", "realvnc-viewer"]
         myChat    = ["Pidgin", "Buddy List", "Skype", "Thunderbird"]
-        myDev     = ["urxvtc", "konsole", "gnome-terminal"]
-        myDocs    = ["Evince", "docx", "libreoffice-startcenter", "libreoffice-writer", "libreoffice-calc", "libreoffice-impress", "libreoffice-draw", "Xpdf"]
+        myDev     = ["urxvtc", "konsole", "gnome-terminal", "urxvt"]
+        myDocs    = ["Evince", "Xchm", "libreoffice-startcenter", "libreoffice-writer", "libreoffice-calc", "libreoffice-impress", "libreoffice-draw", "Xpdf"]
 
         -- resources
         myIgnores = ["desktop", "desktop_window", "notify-osd", "stalonetray", "trayer"]
@@ -105,8 +104,7 @@ manageHook' = (composeAll . concat $
 myDoFullFloat :: ManageHook
 myDoFullFloat = doF W.focusDown <+> doFullFloat
 -- }}}
-layoutHook'  =  onWorkspaces ["1:main","5:others"] customLayout $
-                onWorkspaces ["3:chat"] customLayout $
+layoutHook'  =  onWorkspaces ["1:main","3:chat", "5:others"] customLayout1 $
                 customLayout2
 
 --Bar
@@ -133,14 +131,18 @@ myLogHook h = dynamicLogWithPP $ defaultPP
     }
 
 -- Layout
---- customLayout = avoidStruts $ tiled ||| Mirror tiled ||| Full ||| simpleFloat
-customLayout = avoidStruts $ tiled ||| Mirror tiled ||| Full
-  where
-    tiled   = ResizableTall 1 (2/100) (34/55) []
+--customLayout = avoidStruts $ tiled ||| Mirror tiled ||| Full ||| simpleFloat
+--customLayout = avoidStruts $ tiled ||| Mirror tiled ||| Full
+--  where
+--    tiled   = ResizableTall 1 (2/100) (5/8) []
 
-customLayout2 = avoidStruts $ Full ||| tiled ||| Mirror tiled ||| simpleFloat
+customLayout1 = avoidStruts $ tiled ||| Full
   where
-    tiled   = ResizableTall 1 (2/100) (1/2) []
+    tiled   = ResizableTall 1 (2/100) (5/8) []
+
+customLayout2 = avoidStruts $ Full ||| tiled ||| Mirror tiled
+  where
+    tiled   = ResizableTall 1 (2/100) (5/8) []
 
 -- imLayout    = avoidStruts $ withIM (1%5) (And (ClassName "Pidgin") (Role "buddy_list")) Grid
 --}}}
@@ -192,13 +194,10 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask .|. shiftMask,      xK_l        ), spawn "/usr/bin/xscreensaver-command -lock")
     -- Programs
     , ((0,                          xK_Print    ), spawn "/usr/bin/scrot -e 'mv $f ~/screenshots/'")
-    , ((modMask,                    xK_o        ), spawn "/usr/bin/chromium")
+    , ((modMask,                    xK_f        ), spawn "/usr/bin/chromium")
+    , ((modMask,                    xK_o        ), spawn "EDITOR=vim /usr/bin/urxvtc -e /usr/bin/ranger /mnt/data")
     , ((modMask,                    xK_m        ), spawn "/usr/bin/thunar /mnt/data")
     , ((modMask,                    xK_v        ), spawn "/usr/bin/virtualbox")
-    -- Media Keys
-    , ((0,                          0x1008ff12  ), spawn "amixer -q sset Headphone toggle")       -- XF86AudioMute
-    , ((0,                          0x1008ff11  ), spawn "amixer -q sset Headphone 5%-")   -- XF86AudioLowerVolume
-    , ((0,                          0x1008ff13  ), spawn "amixer -q sset Headphone 5%+")   -- XF86AudioRaiseVolume
 
     -- layouts
     , ((modMask,                    xK_space    ), sendMessage NextLayout)
