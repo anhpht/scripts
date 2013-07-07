@@ -91,7 +91,7 @@ manageHook' = (composeAll . concat $
         myWebs    = ["Firefox", "Google-chrome", "Chromium", "Chromium-browser"]
         myOthers  = ["Vlc", "Gimp", "VirtualBox", "realvnc-viewer"]
         myChat    = ["Pidgin", "Buddy List", "Skype", "Thunderbird"]
-        myDev     = ["urxvtc", "konsole", "gnome-terminal", "urxvt"]
+        myDev     = ["Konsole", "gnome-terminal", "URxvt"]
         myDocs    = ["Evince", "Xchm", "libreoffice-startcenter", "libreoffice-writer", "libreoffice-calc", "libreoffice-impress", "libreoffice-draw", "Xpdf"]
 
         -- resources
@@ -187,7 +187,7 @@ largeXPConfig = mXPConfig
 -- }}}
 -- Key mapping {{{
 keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
-    [ ((modMask,                    xK_p        ), runOrRaisePrompt largeXPConfig)
+    [ ((modMask,                    xK_r        ), runOrRaisePrompt largeXPConfig)
     , ((modMask .|. shiftMask,      xK_Return   ), spawn $ XMonad.terminal conf)
     , ((modMask,                    xK_F2       ), spawn "/usr/bin/gmrun")
     , ((modMask .|. shiftMask,      xK_c        ), kill)
@@ -196,8 +196,13 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((0,                          xK_Print    ), spawn "/usr/bin/scrot -e 'mv $f ~/screenshots/'")
     , ((modMask,                    xK_f        ), spawn "/usr/bin/chromium")
     , ((modMask,                    xK_o        ), spawn "EDITOR=vim /usr/bin/urxvtc -e /usr/bin/ranger /mnt/data")
-    , ((modMask,                    xK_m        ), spawn "/usr/bin/thunar /mnt/data")
+    , ((modMask,                    xK_u        ), spawn "/usr/bin/urxvtc")
+    , ((modMask,                    xK_t        ), spawn "/usr/bin/thunar /mnt/data")
     , ((modMask,                    xK_v        ), spawn "/usr/bin/virtualbox")
+    , ((modMask,                    xK_p        ), spawn "/usr/bin/urxvtc -e /usr/bin/ncmpc")
+    , ((modMask,                    xK_s        ), spawn "/usr/bin/subl")
+    , ((modMask,                    xK_e        ), spawn "/usr/bin/subl")
+    , ((modMask,                    xK_m        ), spawn "/usr/bin/gnome-alsamixer")
 
     -- layouts
     , ((modMask,                    xK_space    ), sendMessage NextLayout)
@@ -210,7 +215,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask .|. shiftMask,      xK_j        ), windows W.swapDown)                          -- swap the focused window with the next window
     , ((modMask .|. shiftMask,      xK_k        ), windows W.swapUp)                            -- swap the focused window with the previous window
     , ((modMask,                    xK_Return   ), windows W.swapMaster)
-    , ((modMask,                    xK_t        ), withFocused $ windows . W.sink)              -- Push window back into tiling
+--    , ((modMask,                    xK_t        ), withFocused $ windows . W.sink)              -- Push window back into tiling
     , ((modMask,                    xK_h        ), sendMessage Shrink)                          -- %! Shrink a master area
     , ((modMask,                    xK_l        ), sendMessage Expand)                          -- %! Expand a master area
     , ((modMask,                    xK_comma    ), sendMessage (IncMasterN 1))
@@ -232,12 +237,12 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     [((m .|. modMask, k), windows $ f i)
         | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-    ++
+--  ++
     --
     -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
     --
-    [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+    -- [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
+    --    | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+    --    , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 --}}}
