@@ -27,6 +27,8 @@ URxvt.url-launcher:         /usr/bin/chromium
 URxvt.matcher.button:       1
 URxvt.cutchars:             "\\ `\"\'()*;<>[]{|}&,=?@^\:"
 URxvt.colorUL:              purple
+URxvt.colorIT:              red
+URxvt.colorBD:              #EBAC54
 
 URxvt.keysym.C-Up:          perl:font-size:incglobal
 URxvt.keysym.C-Down:        perl:font-size:decglobal
