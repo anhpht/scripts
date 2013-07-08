@@ -29,6 +29,7 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.LayoutHints
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.Grid
+import Control.Monad (liftM2)
 
 import Data.Ratio ((%))
 import qualified XMonad.StackSet as W
@@ -72,14 +73,14 @@ main = do
 -- ManageHook {{{
 manageHook' :: ManageHook
 manageHook' = (composeAll . concat $
-    [ [resource     =? r            --> doIgnore            |   r   <- myIgnores] -- ignore desktop
-    , [className    =? c            --> doShift  "1:main"   |   c   <- myDev    ] -- move dev to main
-    , [className    =? c            --> doShift  "2:web"    |   c   <- myWebs   ] -- move webs to web
-    , [className    =? c            --> doShift  "3:chat"   |   c   <- myChat   ] -- move chat to chat
-    , [className    =? c            --> doShift  "4:docs"   |   c   <- myDocs   ] -- move documents to documents
-    , [className    =? c            --> doShift  "5:others" |   c   <- myOthers ] -- move others to others
-    , [className    =? c            --> doCenterFloat       |   c   <- myFloats ] -- float my floats
-    , [name         =? n            --> doCenterFloat       |   n   <- myNames  ] -- float my names
+    [ [resource     =? r            --> doIgnore               |   r   <- myIgnores] -- ignore desktop
+    , [className    =? c            --> viewShift   "1:main"   |   c   <- myDev    ] -- move dev to main
+    , [className    =? c            --> viewShift   "2:web"    |   c   <- myWebs   ] -- move webs to web
+    , [className    =? c            --> doShift     "3:chat"   |   c   <- myChat   ] -- move chat to chat
+    , [className    =? c            --> viewShift   "4:docs"   |   c   <- myDocs   ] -- move documents to documents
+    , [className    =? c            --> viewShift   "5:others" |   c   <- myOthers ] -- move others to others
+    , [className    =? c            --> doCenterFloat          |   c   <- myFloats ] -- float my floats
+    , [name         =? n            --> doCenterFloat          |   n   <- myNames  ] -- float my names
     , [isFullscreen                 --> myDoFullFloat                           ]
     ])
 
@@ -89,17 +90,16 @@ manageHook' = (composeAll . concat $
         -- classnames
         myFloats  = ["Xmessage", "XFontSel", "Wicd Network Manager", "Emacs", "Gvim", "Gedit", "Komodo Edit", "meld", "thunar", "feh"]
         myWebs    = ["Firefox", "Google-chrome", "Chromium", "Chromium-browser"]
-        myOthers  = ["Vlc", "Gimp", "VirtualBox", "realvnc-viewer"]
+        myOthers  = ["Vlc", "Gimp", "VirtualBox", "VNC@Viewer"]
         myChat    = ["Pidgin", "Buddy List", "Skype", "Thunderbird"]
         myDev     = ["Konsole", "gnome-terminal", "URxvt"]
         myDocs    = ["Evince", "Xchm", "libreoffice-startcenter", "libreoffice-writer", "libreoffice-calc", "libreoffice-impress", "libreoffice-draw", "Xpdf"]
 
         -- resources
-        myIgnores = ["desktop", "desktop_window", "notify-osd", "stalonetray", "trayer"]
-
-        -- names
+        myIgnores = ["desktop", "desktop_window"]
         myNames   = ["bashrun"]
 
+        viewShift = doF . liftM2 (.) W.greedyView W.shift
 -- a trick for fullscreen but stil allow focusing of other WSs
 myDoFullFloat :: ManageHook
 myDoFullFloat = doF W.focusDown <+> doFullFloat

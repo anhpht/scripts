@@ -104,13 +104,11 @@ bindkey "^[[B" down-line-or-history
 bindkey "^[[C" forward-char
 bindkey "^[[D" backward-char
 bindkey '^k' kill-line
-#bindkey "^[[H" beginning-of-line       # Home
-#bindkey "^[[F" end-of-line             # End
 bindkey '^[[3~' delete-char            # Del
 bindkey '^[[2~' overwrite-mode         # Insert
 bindkey '^[[2~' overwrite-mode         # ndkey    "\e[7~"    beginning-of-line
-bindkey "[[8~" end-of-line
-bindkey "[[7~" beginning-of-line
+bindkey "^[[7~" beginning-of-line
+bindkey "^[[8~" end-of-line
 
 
 # ---[ Completition system ]-------------------------------------------
