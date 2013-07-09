@@ -37,13 +37,10 @@ import qualified Data.Map as M
 --}}}
 
 -- Config {{{
--- Define Terminal
 myTerminal      = "/usr/bin/urxvtc"
--- Define modMask
 modMask' :: KeyMask
 modMask' = mod4Mask
--- Define workspaces
-myWorkspaces    = ["1:main","2:web","3:chat","4:docs","5:others"]
+myWorkspaces    = ["1:main", "2:web", "3:chat", "4:docs", "5:others"]
 -- Dzen/Conky
 myXmonadBar = "dzen2 -x '1440' -y '0' -h '24' -w '640' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E'"
 myStatusBar = "conky -c /home/fta/.xmonad/.conky_dzen | dzen2 -x '2080' -w '1000' -h '24' -ta 'r' -fg '#FFFFFF' -y '0'"
@@ -81,14 +78,15 @@ manageHook' = (composeAll . concat $
     , [className    =? c            --> viewShift   "5:others" |   c   <- myOthers ] -- move others to others
     , [className    =? c            --> doCenterFloat          |   c   <- myFloats ] -- float my floats
     , [name         =? n            --> doCenterFloat          |   n   <- myNames  ] -- float my names
-    , [isFullscreen                 --> myDoFullFloat                           ]
+    , [isFullscreen                 --> myDoFullFloat                              ]
+    , [manageDocks                                                                 ]
     ])
 
     where
         role      = stringProperty "WM_WINDOW_ROLE"
         name      = stringProperty "WM_NAME"
         -- classnames
-        myFloats  = ["Xmessage", "XFontSel", "Wicd Network Manager", "Emacs", "Gvim", "Gedit", "Komodo Edit", "meld", "thunar", "feh"]
+        myFloats  = ["Xmessage", "XFontSel", "Wicd Network Manager"]
         myWebs    = ["Firefox", "Google-chrome", "Chromium", "Chromium-browser"]
         myOthers  = ["Vlc", "Gimp", "VirtualBox", "VNC@Viewer"]
         myChat    = ["Pidgin", "Buddy List", "Skype", "Thunderbird"]
@@ -96,15 +94,15 @@ manageHook' = (composeAll . concat $
         myDocs    = ["Evince", "Xchm", "libreoffice-startcenter", "libreoffice-writer", "libreoffice-calc", "libreoffice-impress", "libreoffice-draw", "Xpdf"]
 
         -- resources
-        myIgnores = ["desktop", "desktop_window"]
-        myNames   = ["bashrun"]
+        myIgnores = []
+        myNames   = []
 
         viewShift = doF . liftM2 (.) W.greedyView W.shift
 -- a trick for fullscreen but stil allow focusing of other WSs
 myDoFullFloat :: ManageHook
 myDoFullFloat = doF W.focusDown <+> doFullFloat
 -- }}}
-layoutHook'  =  onWorkspaces ["1:main","3:chat", "5:others"] customLayout1 $
+layoutHook'  =  onWorkspaces ["1:main", "2:web", "3:chat", "4:docs", "5:others"] customLayout1 $
                 customLayout2
 
 --Bar
@@ -229,7 +227,8 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
     -- quit, or restart
     , ((modMask .|. shiftMask,      xK_q        ), io (exitWith ExitSuccess))
-    , ((modMask,                    xK_q        ), spawn "killall conky dzen2 && /usr/bin/xmonad --recompile && /usr/bin/xmonad --restart")
+    , ((modMask,                    xK_q        ), kill)
+--    , ((modMask,                    xK_q        ), spawn "killall conky dzen2 && /usr/bin/xmonad --recompile && /usr/bin/xmonad --restart")
     ]
     ++
     -- mod-[1..9] %! Switch to workspace N
