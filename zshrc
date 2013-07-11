@@ -2,6 +2,8 @@ autoload -Uz compinit && compinit
 autoload -Uz colors && colors
 autoload -Uz vcs_info
 autoload -Uz zmv
+autoload -U zsh-mime-setup && zsh-mime-setup
+autoload -U zargs
 
 # ---[ System settings ]------------------------------------------------
 limit -s coredumpsize 0
@@ -28,8 +30,10 @@ setopt   autopushd pushdminus extendedglob rcquotes mailwarning
 unsetopt BG_NICE HUP autoparamslash
 
 # Prompt
-. ~/.zshprompt
-setprompt
+#. ~/.zshprompt
+# setprompt
+PROMPT="%{${fg[cyan]}%}[%{${fg[magenta]}%}%n%{${fg[cyan]}%}] %{${fg[yellow]}%}%~ %{${fg[cyan]}%}%#%{${fg[default]}%} "
+RPROMPT="%{${fg[cyan]}%}[%{${fg[default]}%}%*%{${fg[cyan]}%}] %{${fg[default]}%} "
 
 # Don't expand files matching:
 fignore=(.o .c~)
@@ -84,6 +88,20 @@ alias pa='ps aux'
 alias rm='rm -rf'
 alias q='exit'
 
+
+alias -s pdf=xpdf
+alias -s chm=xchm
+alias -s pl=perl
+alias -s py=python
+alias -s rb=ruby
+alias -s {doc,docx,xls,xlsx,ppt,pptx,odt}=libreoffice
+alias -s {jpg,jpeg,png,gif}=feh
+alias -s {avi,mp4,mp3,mkv,VOB,flv,wmv}=vlc
+alias -s tar.gz="tar -xvzf"
+alias -s tar.bz2="tar -xvjf"
+alias -s rar="unrar x"
+alias -s zip="unzip"
+
 #---[ autojump ]-------------
 if [[ -f /etc/profile.d/autojump.zsh ]]; then
     source /etc/profile.d/autojump.zsh
@@ -115,6 +133,8 @@ bindkey "^[[8~" end-of-line
 zstyle ':completion:*' list-colors no=00 fi=00 di=01\;34 pi=33 so=01\;35 bd=00\;35 cd=00\;34 or=00\;41 mi=00\;45 ex=01\;32
 zstyle ':completion:*:*:kill:*' menu yes select
 zstyle ':completion:*:processes' command 'ps -au$USER'
+zstyle ':completion:*:processes' list-colors "=(#b) #([0-9]#)*=36=31"
+
 zstyle ':completion:*:killall:*' menu yes select
 zstyle ':completion:*:killall:*' command 'ps --forest -u $USER -o cmd'
 

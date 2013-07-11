@@ -15,14 +15,12 @@ if [[ -f /usr/bin/urxvtd ]]; then
 fi
 
 # vnc server for xrdp local session
-#result=$(lsof -i :5900)
-#if [[ "$result" = "" ]] && [[ -f /usr/bin/x11vnc ]]; then
+#if [[ "$(lsof -i :5900)" = "" ]] && [[ -f /usr/bin/x11vnc ]]; then
 #    x11vnc -rfbauth ~/.vnc/passwd -forever -display :0 -o /tmp/x11vnc.log -bg &
 #fi
 
 #Dropbox
-result=$(lsof -i :17500)
-if [[ "$result" = "" ]] && [[ -f /usr/bin/dropboxd ]]; then
+if  [[ -f /usr/bin/dropboxd ]] && [[ "$(lsof -i :17500)" = "" ]]; then
     /usr/bin/dropboxd &
 fi
 
