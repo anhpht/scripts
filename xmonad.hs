@@ -190,10 +190,13 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask,                    xK_F2       ), spawn "/usr/bin/gmrun")
     , ((modMask .|. shiftMask,      xK_c        ), kill)
     , ((modMask .|. shiftMask,      xK_l        ), spawn "/usr/bin/xscreensaver-command -lock")
+    , ((modMask .|. shiftMask,      xK_s        ), spawn "/usr/bin/shutdown -h now")
+    , ((modMask .|. shiftMask,      xK_r        ), spawn "/usr/bin/reboot")
     -- Programs
     , ((0,                          xK_Print    ), spawn "/usr/bin/scrot -e 'mv $f ~/screenshots/'")
     , ((modMask,                    xK_f        ), spawn "/usr/bin/chromium")
     , ((modMask,                    xK_o        ), spawn "EDITOR=vim /usr/bin/urxvtc -e /usr/bin/ranger /mnt/data")
+    , ((modMask,                    xK_x        ), spawn "/usr/bin/urxvtc -e /usr/bin/vim ~/.xmonad/xmonad.hs")
     , ((modMask,                    xK_u        ), spawn "/usr/bin/urxvtc")
     , ((modMask,                    xK_t        ), spawn "/usr/bin/thunar /mnt/data")
     , ((modMask,                    xK_v        ), spawn "/usr/bin/virtualbox")
@@ -201,6 +204,9 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask,                    xK_s        ), spawn "/usr/bin/subl")
     , ((modMask,                    xK_w        ), spawn "/usr/bin/realvnc-viewer")
     , ((modMask,                    xK_m        ), spawn "/usr/bin/gnome-alsamixer")
+    , ((mod1Mask,                   xK_k        ), spawn "amixer -q set Master 2dB+")
+    , ((mod1Mask,                   xK_j        ), spawn "amixer -q set Master 2dB-")
+    , ((mod1Mask,                   xK_Return   ), spawn "amixer -q set Master toggle")
 
     -- layouts
     , ((modMask,                    xK_space    ), sendMessage NextLayout)
