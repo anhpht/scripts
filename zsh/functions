@@ -1,0 +1,28 @@
+setprompt ()
+{
+    if [[ "$terminfo[colors]" -ge 8 ]]; then
+        colors
+    fi
+
+    for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+        eval PR_$color='%{$fg[${(L)color}]%}'
+        eval PR_LIGHT_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
+        (( count = $count + 1 ))
+    done
+
+    PR_NO_COLOUR="%{$terminfo[sgr0]%}"
+
+    typeset -A altchar
+    set -A altchar ${(s..)terminfo[acsc]}
+    PR_SHIFT_IN="%{$terminfo[smacs]%}"
+    PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
+    PR_HBAR=${altchar[q]:--}
+    PR_ULCORNER=${altchar[l]:--}
+    PR_LLCORNER=${altchar[m]:--}
+
+    PROMPT='$PR_YELLOW$PR_SHIFT_IN$PR_ULCORNER$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(\
+$PR_YELLOW%(!.%SROOT%s.%n)$PR_GREEN@%m: $PR_LIGHT_RED%<...<%~%<<$PR_BLUE)${vcs_info_msg_0_}\
+
+$PR_YELLOW$PR_SHIFT_IN$PR_LLCORNER$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(%(?..$PR_BLUE%?:)$PR_YELLOW%T$PR_GREEN on $PR_RED%w\
+$PR_BLUE)$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT$PR_NO_COLOUR'
+}
