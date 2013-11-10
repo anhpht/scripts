@@ -1,0 +1,10 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/mnt/data/tmp/sshlogs'
+let g:netrw_dirhist_2='/home/fta/.mpd/playlists'
+let g:netrw_dirhist_3='/usr/share/vim/vimfiles'
+let g:netrw_dirhist_4='/mnt/data/dev/asm'
+let g:netrw_dirhist_5='/usr/share/vim/plugin'
+let g:netrw_dirhist_6='/home/fta'
+let g:netrw_dirhist_7='/mnt/data/tmp'
+let g:netrw_dirhist_8='/usr/share/nmap/scripts'

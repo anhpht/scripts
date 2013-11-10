@@ -7,27 +7,36 @@ set laststatus=2
 set statusline=\ %F%m%r%h\ %w\ \ \ Line:\ %l/%L:%c
 set pt=<f5>
 set encoding=utf-8
-set nocompatible           "no compatiple with vi
+set nocompatible                                      " No compatiple with vi
 set ignorecase
 set smartcase
-set backspace=indent,eol,start  " allow backspacing over everything in insert mode
-set ruler		   " show the cursor position all the time
-set showcmd		   " display incomplete commands
+set backspace=indent,eol,start                        " Allow backspacing over everything in insert mode
+set ruler                                             " Show the cursor position all the time
+set showcmd                                           " Display incomplete commands
 set clipboard=unnamed
-set showmatch               " Show matching brackets.
-set mat=5  " Bracket blinking.
+set showmatch                                         " Show matching brackets.
+set cursorline
+set mat=5                                             " Bracket blinking.
 set list
-set novisualbell            " No blinking .
-set noerrorbells            " No noise.
+set novisualbell                                      " No blinking .
+set noerrorbells                                      " No noise.
 set background=dark
-colorscheme aqua
+set autochdir
+"colorscheme aqua
+" colorscheme molokai
+colorscheme holokai
+"colorscheme monokai
+"colorscheme Darkside
+"colorscheme darkZ
+"colorscheme dawn
+"colorscheme dante
 filetype plugin indent on
 syntax on
 
 " Formatting
 set lcs=tab:\ \ ,eol:\ \,trail:~,extends:>,precedes:< " Show $ at end of line and trailing space as ~
-set ts=4  " Tabs are 4 spaces
-set bs=2  " Backspace over everything in insert mode
+set ts=4                                              " Tabs are 4 spaces
+set bs=2                                              " Backspace over everything in insert mode
 set number
 set wrap
 set expandtab
@@ -41,10 +50,9 @@ set cindent
 set autoindent
 set smartindent
 set textwidth=500
-set tabstop=4
 set lbr
 
-"Filetype mapping
+" Filetype mapping
 au! BufNewFile,BufRead *.csv,*.tsv,*.psv setf csv
 au BufNewFile,BufRead *.log setlocal ft=lisp
 au BufNewFile,BufRead *.old setlocal ft=c
@@ -97,7 +105,6 @@ map T :Man <C-R><C-W><CR>
 map gn :NERDTreeToggle<CR>
 map gt :VimwikiTable<space>
 nnoremap <silent> <Leader>e :Explore<CR>
-
 " TagsList
 " let g:loaded_ccase = 1
 let g:Tlist_Ctags_Cmd = "/usr/bin/ctags"
@@ -143,11 +150,11 @@ vmap // y/<C-R>"<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""
 " Set the dictionaries
 set complete +=k
-set dictionary=~/.vim/dict/*  "/usr/share/dict/*
+set dictionary=/usr/share/dict/*
 
 " Makes all types of completions!!
 let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabContextDefaultCompletionType = "<c-n>" " for spell correction <c-x>s or for thesaurus <c-x><c-t>
+let g:SuperTabContextDefaultCompletionType = "<c-n>" " For spell correction <c-x>s or for thesaurus <c-x><c-t>
 
 set csprg='/usr/bin/cscope'
 autocmd bufwritepost vimrc source ~/.vimrc  " When vimrc is edited, reload it!
