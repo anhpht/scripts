@@ -1,4 +1,7 @@
 " General setting
+
+set title
+set showcmd
 set noswapfile
 set incsearch
 set hlsearch
@@ -12,7 +15,6 @@ set ignorecase
 set smartcase
 set backspace=indent,eol,start                        " Allow backspacing over everything in insert mode
 set ruler                                             " Show the cursor position all the time
-set showcmd                                           " Display incomplete commands
 set clipboard=unnamed
 set showmatch                                         " Show matching brackets.
 set cursorline
@@ -22,15 +24,8 @@ set novisualbell                                      " No blinking .
 set noerrorbells                                      " No noise.
 set background=dark
 set autochdir
-"colorscheme aqua
-" colorscheme molokai
-colorscheme holokai
-"colorscheme monokai
-"colorscheme Darkside
-"colorscheme darkZ
-"colorscheme dawn
-"colorscheme dante
-filetype plugin indent on
+filetype plugin on
+filetype indent on
 syntax on
 
 " Formatting
@@ -52,6 +47,59 @@ set smartindent
 set textwidth=500
 set lbr
 
+" Normal mode shortcuts
+map <right> :bn <enter>
+map <left> :bp <enter>
+map , :
+map <C-L> <C-W>l<C-W>_
+map <C-H> <C-W>h<C-W>_
+map <C-K> <C-W>k
+map <C-J> <C-W>j
+
+" Open manpage in new buffer
+map T :Man <C-R><C-W><CR>
+
+nnoremap <silent> <Leader>e :Explore<CR>
+
+" Insert mode shortcuts
+inoremap <C-U> <C-G>u<C-U>
+imap ii <Esc>
+
+" Visual mode shortcuts
+vmap // y/<C-R>"<CR>
+
+" Plugins, tools
+let g:Tlist_Ctags_Cmd = "/usr/bin/ctags"
+let tlist_cpp_settings = 'c++;c:class;f:function'
+map gl :TlistToggle<CR>
+
+set csprg='/usr/bin/cscope'
+runtime ftplugin/man.vim
+let g:pydiction_location = '/usr/share/pydiction/complete-dict'
+autocmd bufwritepost vimrc source ~/.vimrc  " When vimrc is edited, reload it!
+
+" Ranger Chooser
+fun! RangerChooser()
+    exec "silent !ranger --choosefile=/tmp/chosenfile " . expand("%:p:h")
+    if filereadable('/tmp/chosenfile')
+        exec 'edit ' . system('cat /tmp/chosenfile')
+        call system('rm /tmp/chosenfile')
+    endif
+    redraw!
+endfun
+map <Leader>r :call RangerChooser()<CR>
+
+" Smart Home
+function! SmartHome()
+    let s:col = col(".")
+    normal! ^
+    if s:col == col(".")
+        normal! 0
+    endif
+endfunction
+nnoremap <silent> <Home> :call SmartHome()<CR>
+inoremap <silent> <Home> <C-O>:call SmartHome()<CR>
+
 " Filetype mapping
 au! BufNewFile,BufRead *.csv,*.tsv,*.psv setf csv
 au BufNewFile,BufRead *.log setlocal ft=lisp
@@ -59,7 +107,6 @@ au BufNewFile,BufRead *.old setlocal ft=c
 au BufNewFile,BufRead *.new setlocal ft=c
 au BufRead /tmp/mutt-* set tw=80
 au BufEnter * if &filetype == 'help' | :only | endif
-"au BufEnter * :only
 
 " Choose the fold method depending of the file type and unfold when opening it
 autocmd Syntax c,cpp,vim,xml,html,xhtml setlocal foldmethod=syntax
@@ -87,75 +134,15 @@ autocmd BufReadPost *.xls redraw
 au BufRead,BufWritePost *.csv,*.xls :%ArrangeColumn
 au BufWritePre *.csv,*.xls :%UnArrangeColumn
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""
-" Normal mode shortcuts
-"""""""""""""""""""""""""""""""""""""""""""""""""""
-map <right> :bn <enter>
-map <left> :bp <enter>
-map , :
-map <C-c> I% <Esc>
-map <tab> I <tab> <Esc>
-map <C-L> <C-W>l<C-W>_
-map <C-H> <C-W>h<C-W>_
-map <C-K> <C-W>k
-map <C-J> <C-W>j
-map T :Man <C-R><C-W><CR>
+" Compile source
+au FileType C set makeprg=gcc\ %
+au FileType Cpp set makeprg=g++\ %
 
-" NERDTree Vimwikitable Explore
-map gn :NERDTreeToggle<CR>
-map gt :VimwikiTable<space>
-nnoremap <silent> <Leader>e :Explore<CR>
-" TagsList
-" let g:loaded_ccase = 1
-let g:Tlist_Ctags_Cmd = "/usr/bin/ctags"
-let g:Tlitst_Use_Right_Window = 1
-let g:pydiction_location = '/usr/share/pydiction/complete-dict'
-
-map gl :TlistToggle<CR>
-
-" Ranger Chooser
-fun! RangerChooser()
-    exec "silent !ranger --choosefile=/tmp/chosenfile " . expand("%:p:h")
-    if filereadable('/tmp/chosenfile')
-        exec 'edit ' . system('cat /tmp/chosenfile')
-        call system('rm /tmp/chosenfile')
-    endif
-    redraw!
-endfun
-map <Leader>r :call RangerChooser()<CR>
-
-" Smart Home
-function! SmartHome()
-    let s:col = col(".")
-    normal! ^
-    if s:col == col(".")
-        normal! 0
-    endif
-endfunction
-nnoremap <silent> <Home> :call SmartHome()<CR>
-inoremap <silent> <Home> <C-O>:call SmartHome()<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""
-" Insert mode shortcuts
-"""""""""""""""""""""""""""""""""""""""""""""""""""
-inoremap <C-U> <C-G>u<C-U>
-imap ii <Esc>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Visual mode shortcuts
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-vmap // y/<C-R>"<CR>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""
-" Set the dictionaries
-set complete +=k
-set dictionary=/usr/share/dict/*
-
-" Makes all types of completions!!
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabContextDefaultCompletionType = "<c-n>" " For spell correction <c-x>s or for thesaurus <c-x><c-t>
-
-set csprg='/usr/bin/cscope'
-autocmd bufwritepost vimrc source ~/.vimrc  " When vimrc is edited, reload it!
-runtime ftplugin/man.vim
+colorscheme Darkside
+" colorscheme aqua
+" colorscheme molokai
+" colorscheme holokai
+" colorscheme monokai
+" colorscheme darkZ
+" colorscheme dawn
+" colorscheme dante
