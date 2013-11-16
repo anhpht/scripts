@@ -1,5 +1,4 @@
 " General setting
-
 set title
 set showcmd
 set noswapfile
@@ -55,8 +54,6 @@ map <C-L> <C-W>l<C-W>_
 map <C-H> <C-W>h<C-W>_
 map <C-K> <C-W>k
 map <C-J> <C-W>j
-
-" Open manpage in new buffer
 map T :Man <C-R><C-W><CR>
 
 nnoremap <silent> <Leader>e :Explore<CR>
@@ -101,42 +98,37 @@ nnoremap <silent> <Home> :call SmartHome()<CR>
 inoremap <silent> <Home> <C-O>:call SmartHome()<CR>
 
 " Filetype mapping
-au! BufNewFile,BufRead *.csv,*.tsv,*.psv setf csv
-au BufNewFile,BufRead *.log setlocal ft=lisp
-au BufNewFile,BufRead *.old setlocal ft=c
-au BufNewFile,BufRead *.new setlocal ft=c
-au BufRead /tmp/mutt-* set tw=80
-au BufEnter * if &filetype == 'help' | :only | endif
+" au! BufNewFile,BufRead *.csv,*.tsv,*.psv setf csv
+" au BufNewFile,BufRead *.log setlocal ft=lisp
+" au BufNewFile,BufRead *.old setlocal ft=c
+" au BufNewFile,BufRead *.new setlocal ft=c
+" au BufRead /tmp/mutt-* set tw=80
+" au BufEnter * if &filetype == 'help' | :only | endif
 
 " Choose the fold method depending of the file type and unfold when opening it
-autocmd Syntax c,cpp,vim,xml,html,xhtml setlocal foldmethod=syntax
-autocmd Syntax python setlocal foldmethod=indent
-autocmd Syntax c,cpp,vim,xml,html,xhtml,perl,python normal zR
+" autocmd Syntax c,cpp,vim,xml,html,xhtml setlocal foldmethod=syntax
+" autocmd Syntax python setlocal foldmethod=indent
+" autocmd Syntax c,cpp,vim,xml,html,xhtml,perl,python normal zR
 
 " Autocompletion
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd FileType c set omnifunc=ccomplete#Complete
+" autocmd FileType python set omnifunc=pythoncomplete#Complete
+" autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+" autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+" autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+" autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+" autocmd FileType c set omnifunc=ccomplete#Complete
 
 " Read .pdf .doc .docx .xls
-autocmd BufReadPre *.pdf set ro nowrap
-autocmd BufReadPost *.pdf silent %!pdftotext "%" -nopgbrk -layout -q -eol unix -
-autocmd BufReadPre *.doc set ro
-autocmd BufReadPost *.doc %!antiword "%"
-autocmd BufReadPre *.docx set ro
-autocmd BufReadPost *.docx %!docx2txt.pl "%" -
-autocmd BufReadPre *.xls set ro | setf csv
-autocmd BufReadPost *.xls silent! %!xls2csv -q -x "%" -c -
-autocmd BufReadPost *.xls redraw
-au BufRead,BufWritePost *.csv,*.xls :%ArrangeColumn
-au BufWritePre *.csv,*.xls :%UnArrangeColumn
+" autocmd BufReadPre *.pdf set ro nowrap
+" autocmd BufReadPost *.pdf silent %!pdftotext "%" -nopgbrk -layout -q -eol unix -
+" autocmd BufReadPre *.doc set ro
+" autocmd BufReadPost *.doc %!antiword "%"
+" autocmd BufReadPre *.docx set ro
+" autocmd BufReadPost *.docx %!docx2txt.pl "%" -
 
 " Compile source
-au FileType C set makeprg=gcc\ %
-au FileType Cpp set makeprg=g++\ %
+" au FileType C set makeprg=gcc\ %
+" au FileType Cpp set makeprg=g++\ %
 
 colorscheme Darkside
 " colorscheme aqua
