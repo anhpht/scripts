@@ -72,8 +72,12 @@ map gl :TlistToggle<CR>
 
 set csprg='/usr/bin/cscope'
 runtime ftplugin/man.vim
-let g:pydiction_location = '/usr/share/pydiction/complete-dict'
 autocmd bufwritepost vimrc source ~/.vimrc  " When vimrc is edited, reload it!
+
+" Python
+" let g:pydoc_open_cmd = 'tabnew'
+let g:pydiction_location = '/usr/share/pydiction/complete-dict'
+map ? :Pydoc <C-R><C-W><CR>
 
 " Ranger Chooser
 fun! RangerChooser()
