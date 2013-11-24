@@ -11,7 +11,6 @@ zmodload zsh/complist
 limit -s coredumpsize 0
 umask    0027
 source   /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source   zsh/functions
 
 setopt   alwaystoend
 setopt   autocd
@@ -63,7 +62,7 @@ export EDITOR=vim
 export LC_ALL=en_US.UTF-8
 export MANSECT=3:2:9:8:1:5:4:7:6:n
 export GREP_OPTIONS='--color=auto' GREP_COLOR='0;35'
-export CSCOPE_DB=/home/fta/cscope/oam/cscope.out
+export CSCOPE_DB=/home/fta/tmp/omniorb/cscope.out
 
 PATH='/usr/bin'
 PATH=$PATH':/usr/sbin'
@@ -71,6 +70,7 @@ PATH=$PATH':/usr/local/bin'
 PATH=$PATH':/usr/local/sbin'
 PATH=$PATH':/usr/bin/core_perl'
 PATH=$PATH':/opt/pyshell/bin'
+PATH=$PATH':/opt/xplico/bin'
 PATH=$PATH':'$HOME'/bin'
 PATH=$PATH':/bin'
 PATH=$PATH':/sbin'
@@ -100,14 +100,12 @@ alias pa='ps aux'
 alias rm='rm -rf'
 alias q='exit'
 alias mmv='noglob zmv -W'
+alias fn='find . -name'
 
 alias -s pdf=evince
 alias -s chm=xchm
-alias -s pl=perl
-alias -s py=python
-alias -s rb=ruby
 alias -s {doc,docx,xls,xlsx,ppt,pptx,odt}=libreoffice
-alias -s {jpg,jpeg,png,gif}=feh
+alias -s {jpg,jpeg,png,gif,JPG}=feh
 alias -s {avi,mp4,mp3,mkv,VOB,flv,wmv}=vlc
 alias -s {bz2,gz}=extract
 alias -s rar='unrar x'
@@ -188,9 +186,38 @@ zstyle ':vcs_info:*' actionformats '%c%u|%s@%a:%b'
 zstyle ':vcs_info:*' branchformat '%b@%r'
 zstyle ':vcs_info:*' unstagedstr "%{$fg_no_bold[red]%}"
 zstyle ':vcs_info:*' stagedstr "%{$fg_no_bold[yellow]%}"
-zstyle ':vcs_info:*' enable svn git
+zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git*:*' formats '%c%u|%s@%a:%b@%.5i'
 zstyle ':vcs_info:git*:*' actionformats '%c%u|%s@%a:%b@%.5i'
 
-# Prompt
+
+setprompt ()
+{
+    if [[ "$terminfo[colors]" -ge 8 ]]; then
+        colors
+    fi
+
+    for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+        eval PR_$color='%{$fg[${(L)color}]%}'
+        eval PR_LIGHT_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
+        (( count = $count + 1 ))
+    done
+
+    PR_NO_COLOUR="%{$terminfo[sgr0]%}"
+
+    typeset -A altchar
+    set -A altchar ${(s..)terminfo[acsc]}
+    PR_SHIFT_IN="%{$terminfo[smacs]%}"
+    PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
+    PR_HBAR=${altchar[q]:--}
+    PR_ULCORNER=${altchar[l]:--}
+    PR_LLCORNER=${altchar[m]:--}
+
+    PROMPT='$PR_YELLOW$PR_SHIFT_IN$PR_ULCORNER$PR_CYAN$PR_HBAR$PR_SHIFT_OUT(\
+$PR_YELLOW%(!.%SROOT%s.%n)$PR_GREEN@%m: $PR_LIGHT_RED%<...<%~%<<$PR_CYAN)${vcs_info_msg_0_}\
+
+$PR_YELLOW$PR_SHIFT_IN$PR_LLCORNER$PR_CYAN$PR_HBAR$PR_SHIFT_OUT(%(?..$PR_CYAN%?:)$PR_YELLOW%T$PR_GREEN on $PR_RED%w\
+$PR_CYAN) $PR_SHIFT_OUT$PR_NO_COLOUR'
+}
+
 setprompt

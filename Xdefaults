@@ -3,21 +3,24 @@
 !URxvt*scrollBar_right:true
 !urxvt*override-redirect:false
 urxvt*perl-lib:             /usr/lib/urxvt/perl/
-urxvt*perl-ext-common:      default,matcher,searchable-scrollback,vtwheel,clipboard,font-size,keyboard-select,url-select
-URxvt.scrollBar: false
-urxvt*secondaryScroll:      true
-urxvt*saveLines:            65535
-urxvt*cursorBlink:          false
-urxvt*urgentOnBell:         true
+urxvt*perl-ext-common:      default,matcher,searchable-scrollback,vtwheel,clipboard,keyboard-select,url-select,tabbedex
+!font-size,
+URxvt.scrollBar:            false
+!urxvt*secondaryScroll:      true
+URxvt.scrollWithBuffer:     true
+URxvt.scrollTtyOutput:      false
+URxvt.scrollTtyKeypress:    true
 
 URxvt.keysym.M-c:           perl:clipboard:copy
 URxvt.keysym.M-v:           perl:clipboard:paste
 URxvt.keysym.M-C-v:         perl:clipboard:paste_escaped
 
+urxvt*saveLines:            65535
+urxvt*cursorBlink:          false
+urxvt*urgentOnBell:         true
+
 URxvt.keysym.M-Escape:      perl:keyboard-select:activate
 URxvt.keysym.M-s:           perl:keyboard-select:search
-
-!URxvt.tabbed.title:         no
 
 URxvt.url-select.launcher:  /usr/bin/chromium
 URxvt.url-select.underline: true
@@ -30,17 +33,18 @@ URxvt.colorUL:              purple
 URxvt.colorIT:              red
 URxvt.colorBD:              #EBAC54
 
-URxvt.keysym.C-Up:          perl:font-size:incglobal
-URxvt.keysym.C-Down:        perl:font-size:decglobal
+!URxvt.keysym.C-Up:          perl:font-size:incglobal
+!URxvt.keysym.C-Down:        perl:font-size:decglobal
 !URxvt.keysym.F11:           perl:fullscreen:switch
 
-!URxvt.tabbed.tabbar-fg:     2
-!URxvt.tabbed.tabbar-bg:     0
-!URxvt.tabbed.tab-fg:        3
-!URxvt.tabbed.tab-bg:        0
+URxvt.tabbed.title:         no
+URxvt.tabbed.tabbar-fg:     2
+URxvt.tabbed.tabbar-bg:     0
+URxvt.tabbed.tab-fg:        3
+URxvt.tabbed.tab-bg:        0
 
-URxvt.font:                 xft:Monospace:style=bold:pixelsize=14
-urxvt*cursorColor:          #DCDCCC
+URxvt.font:                 xft:Monospace:style=regular:pixelsize=15
+urxvt*cursorColor:          red
 urxvt*background:           black
 urxvt*foreground:           #00c800
 

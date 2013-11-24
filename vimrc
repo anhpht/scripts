@@ -67,6 +67,7 @@ vmap // y/<C-R>"<CR>
 
 " Plugins, tools
 let g:Tlist_Ctags_Cmd = "/usr/bin/ctags"
+set tags+=/mnt/data/tmp/omniorb/tags
 let tlist_cpp_settings = 'c++;c:class;f:function'
 map gl :TlistToggle<CR>
 
@@ -134,11 +135,12 @@ inoremap <silent> <Home> <C-O>:call SmartHome()<CR>
 " au FileType C set makeprg=gcc\ %
 " au FileType Cpp set makeprg=g++\ %
 
-colorscheme Darkside
+" colorscheme Darkside
 " colorscheme aqua
-" colorscheme molokai
+colorscheme molokai
 " colorscheme holokai
 " colorscheme monokai
 " colorscheme darkZ
 " colorscheme dawn
-" colorscheme dante
+"  colorscheme dante
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
