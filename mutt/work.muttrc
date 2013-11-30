@@ -1,0 +1,15 @@
+# Word
+
+set mbox_type               = "mbox"
+set realname                = "First Last"
+set from                    = "myemail@company.com"
+set envelope_from           = "yes"
+set use_from                = "yes"
+set folder                  = "$HOME/Mail"
+set spoolfile               = +"Inbox"
+set record                  = +"Sent"
+set postponed               = +"Drafts"
+mailboxes                   = +"Inbox"
+mailboxes                   = +"Sent"
+set smtp_url                = "smtp://username:password@10@localhost:1025"
+mailboxes                   = `cd "$HOME/Mail"; echo *.msf | sed 's/\.msf /\" +\"/g; s/\.msf/\"/; s/^/+\"/'`

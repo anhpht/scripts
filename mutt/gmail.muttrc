@@ -1,0 +1,17 @@
+# gmail
+
+set realname                = "First Last"
+set from                    = "username@gmail.com"
+set envelope_from           = "yes"
+set mbox_type               = "mbox"
+set folder                  = "$HOME/Mail"
+set use_from                = "yes"
+set ssl_force_tls           = "yes"
+unset ssl_starttls
+set smtp_url                = "smtps://username:password@smtp.gmail.com"
+set spoolfile               = +"Inbox"
+unset record
+set postponed               = +"Drafts"
+mailboxes                   = +"Inbox"
+mailboxes                   = +"Sent"
+mailboxes                   = +"search"

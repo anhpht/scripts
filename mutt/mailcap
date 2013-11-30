@@ -1,0 +1,8 @@
+text/html; w3m -I %{charset} -T text/html; copiousoutput;
+image/*; feh %s
+video/*; totem %s
+audio/*; totem %s
+text/*; vim %s
+application/pdf; evince %s
+application/msexcel; libreoffice %s
+application/msword; libreoffice %s

@@ -1,0 +1,10 @@
+set daemon 60
+poll pop.gmail.com with proto POP3
+user 'username@gmail.com' there with password 'password' is 'fta' here
+mda "/usr/bin/procmail -d %T"
+options
+no keep
+ssl
+sslcertck
+sslcertpath /etc/ssl/certs
+set logfile /tmp/fetchmail.log

@@ -1,13 +1,8 @@
 ! General
-!urxvt*loginShell:     true
-!URxvt*scrollBar_right:true
-!urxvt*override-redirect:false
 urxvt*perl-lib:             /usr/lib/urxvt/perl/
 urxvt*perl-ext-common:      default,matcher,searchable-scrollback,vtwheel,clipboard,keyboard-select,url-select,tabbedex
-!font-size,
 URxvt.tabbed.new-button:    true
 URxvt.scrollBar:            false
-!urxvt*secondaryScroll:      true
 URxvt.scrollWithBuffer:     true
 URxvt.scrollTtyOutput:      false
 URxvt.scrollTtyKeypress:    true
@@ -33,10 +28,6 @@ URxvt.cutchars:             "\\ `\"\'()*;<>[]{|}&,=?@^\:"
 URxvt.colorUL:              purple
 URxvt.colorIT:              red
 URxvt.colorBD:              #EBAC54
-
-!URxvt.keysym.C-Up:          perl:font-size:incglobal
-!URxvt.keysym.C-Down:        perl:font-size:decglobal
-!URxvt.keysym.F11:           perl:fullscreen:switch
 
 URxvt.tabbed.title:         no
 URxvt.tabbed.tabbar-fg:     2

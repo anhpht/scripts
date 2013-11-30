@@ -1,0 +1,228 @@
+source "~/.mutt/gmail.muttrc"
+#source "~/.mutt/work.muttrc"
+
+# directories and commands
+set header_cache        = ~/.mutt/cache/headers                  # where to store headers
+set message_cachedir    = ~/.mutt/cache/bodies                   # where to store bodies
+set certificate_file    = /etc/ssl/certs                         # where to store certs
+set mailcap_path        = ~/.mutt/mailcap                        # entrys for filetypes
+set tmpdir              = ~/.mutt/tmp                            # where to keep temp files
+set editor              = "/usr/bin/vim"
+set ispell              = "/usr/bin/aspell -e -c"                # use aspell as ispell
+
+# main options
+set timeout             = 3                                      # idle time before scanning
+set imap_keepalive      = 300
+set mail_check          = 30                                     # minimum time between scans
+set alias_file          = ~/.mutt/aliases
+set sort_alias          = alias                                  # sort alias file by alias
+source ~/.mutt/aliases
+set reverse_alias                                                # show names from alias file in index
+unset move                                                       # gmail does that
+set delete                                                       # don't ask, just do
+unset confirmappend                                              # don't ask, just do!
+set quit                                                         # don't ask, just do!!
+unset mark_old                                                   # read/new is good enough for me
+set beep_new                                                     # bell on new mails
+set pipe_decode                                                  # strip headers and eval mimes when piping
+set thorough_search                                              # strip headers and eval mimes before searching
+unset help
+set content_type        = "text/plain"
+set  implicit_autoview
+unset indent_string
+
+# index options
+set sort                = threads                                # like gmail
+set sort_aux            = reverse-last-date-received             # like gmail
+set uncollapse_jump                                              # don't collapse on an unread message 
+set sort_re                                                      # thread based on regex
+set reply_regexp        = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
+
+# pager options
+set pager_index_lines   = 10                                     # number of index lines to show 
+set pager_context       = 5                                      # number of context lines to show
+set pager_stop                                                   # don't go to next message automatically
+set menu_scroll                                                  # scroll in menus 
+set smart_wrap                                                   # don't split words
+set tilde                                                        # show tildes like in vim
+unset markers                                                    # no ugly plus signs
+alternative_order text/html text/plain text/enriched             # save html for last
+set quote_regexp        = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+set status_on_top                                                # as you'd expect
+
+# formats
+set charset             = utf-8
+set date_format         = "%d/%m/%y at %I:%M%P"
+set index_format        = "%3C  %S   %D  •  %-25.25L %s %> %c"
+set pager_format        = "Reading message %C of %m %> %lL [%P]" # pager statusbar
+set folder_format       = "%2C %t %N %8s %d %f"                  # mailbox list view
+set status_format       = " %?M?%M/?%m Mails %?n?%n new, ?%?u?%u unread, ?%?p?%p drafts, ?%?t?%t +tagged, ?%?d?%d deleted, ?[%f %l]  %?b?%b unread messages. ?%>  %V   sort by: %s/%S  [%P]"
+set alias_format        = "%4n %t %-20a  %r"
+
+# composing mail
+set fast_reply                                                   # skip to compose when replying
+set sendmail_wait       = -1                                     # don't wait for sending... to complete
+set askcc                                                        # ask for CC:
+set fcc_attach                                                   # save attachments with the body
+unset mime_forward                                               # forward attachments as part of body
+set forward_format      = "Fwd: %s"                              # format for subject when forwarding
+set forward_decode                                               # decode when forwarding
+set attribution         = "On %d, %n wrote:"                     # set the attribution
+set reply_to                                                     # reply to Reply to: field
+set reverse_name                                                 # reply as whomever it was to
+set include                                                      # include message in replies
+set forward_quote                                                # include message in forwards
+set edit_headers                                                 # include message in forwards
+set query_command       = "abook --mutt-query '%s'"
+
+# headers to show
+ignore *                                                         # ignore all headers
+unignore from: to: cc: date: subject:                            # show only these
+hdr_order from: to: cc: date: subject:                           # and in this order
+
+# main colors
+color normal     white        default
+
+color tree       brightmagenta default
+color error      brightred     default
+color message    brightgreen   default
+color index      blue          default "~u"
+
+# uncolor certain messages
+uncolor index "~P"
+uncolor index "~C @.com"
+uncolor index "~N ~u"
+uncolor index "~N !~u"
+uncolor index "~T"
+uncolor index "~D"
+
+# and recolor them appropriately
+color index      brightyellow  default "~P"
+color index      green         default "~C @.com"
+color index      red           default "~N ~u"  # new ML mail
+color index      brightred     default "~N !~u" # new non-ML mail
+color index      brightgreen   default "~T"
+color index      brightblack   default "~D"
+
+# set up the headers
+color header     brightmagenta default "^from:"
+color header     green         default "^to:"
+color header     yellow        default "^cc:"
+color header     blue          default "^date:"
+color header     brightgreen   default "^subject:"
+
+# message bodies
+color attachment brightblack   default
+color search     red           brightblack
+color signature  cyan          default
+color tilde      brightblack   default
+color hdrdefault yellow        default
+color bold       brightyellow  default
+
+# urls
+color body       brightblue    default "(^|<| )mailto:[^ ]+@[^ ]( |>|$)"
+color body       brightblue    default "(^|<| )(http|https|ftp|file|telnet|news|finger)://[^ ]+( |>|$)"
+
+# smileys, the right way and the backward-ass euro way
+color body       brightmagenta default "(^| )+(|[<>|])[8;:](|[^ ])[)(/|DOPS]( |$)+"
+color body       brightmagenta default "(^| )+[)(/|DOPS](|[^ ])[8;:](|[<>|])( |$)+"
+
+# *bold*, _underline_, and /italic/
+color body       brightcyan    default "(^| )\\*[^ ]+\\*( |$)"
+color body       brightcyan    default "(^| )_[^ ]+_( |$)"
+color body       brightcyan    default "(^| )/[^ ]+/( |$)"
+
+# quote blocks
+color quoted     magenta       default
+color quoted1    cyan          default
+color quoted2    green         default
+color quoted3    yellow        default
+color quoted4    brightmagenta default
+color quoted5    brightgreen   default
+color quoted6    brightyellow  default
+color quoted7    brightcyan    default
+
+# PGP messages
+color body      brightgreen    default "^gpg: Good signature .*"
+color body      yellow         default "^gpg: "
+color body      brightred      default "^gpg: BAD signature from. *"
+
+# auto view
+auto_view text/html
+auto_view application/emacs-lisp
+auto_view application/ms-tnef
+auto_view application/msexcel
+auto_view application/msword
+auto_view application/octet-stream
+auto_view application/pdf
+auto_view application/x-delphi-source
+auto_view application/x-perl
+auto_view application/x-sh
+auto_view application/x-tcl
+auto_view image/tiff
+auto_view text/x-script.elisp
+#auto_view text/x-vcard
+#auto_view application/x-gunzip
+#auto_view application/x-gzip
+#auto_view application/x-zip-compressed
+#auto_view application/zip
+#auto_view application/x-tar-gz
+#auto_view application/x-arj-compressed
+
+# binding keys #
+bind index,pager \#     noop
+bind index i            noop
+
+# bindings
+bind pager q            exit
+bind pager /            search
+bind pager <up>         previous-line
+bind pager <down>       next-line
+bind pager k            previous-line
+bind pager j            next-line
+bind index gg           first-entry
+bind index G            last-entry
+bind pager gg           top
+bind pager G            bottom
+bind pager >            next-thread
+bind pager <            previous-thread
+bind pager K            previous-undeleted
+bind pager J            next-undeleted
+bind index K            previous-unread
+bind index J            next-unread
+bind index W            clear-flag
+bind index w            set-flag
+bind index,pager R      group-reply
+bind compose p          pgp-menu
+
+# macros
+macro generic ,f        "<shell-escape>mairix " "search via mairix"
+macro index gl          "<change-folder> =Inbox<enter>"           "go to mail Inbox"
+macro index \Cr         "<tag-prefix><clear-flag>N"               "mark tagged messages as read"
+macro index B           "<limit>~b "                              "search message bodies"
+macro index,pager F     "<save-message>=GMail/Flagged<enter>"     "mark message as Flagged/Starred"
+macro index G           "!fetchmail\n" "Invoke fetchmail"
+
+macro index,pager <F1>  "<shell-escape>less /usr/share/doc/mutt/manual.txt<enter>" "Show Mutt documentation"
+macro index,pager <F2>  ":toggle help<enter>:set ?help<enter>"  "toggle help status line"
+macro index,pager <F5>  ":source ~/.mutt/muttrc\n"              "Reload the muttrc"
+
+macro compose \Cg       "Fgpg --clearsign\ny"
+macro compose \Cp       "Fgpg --clearsign\ny^T^Uapplication/pgp; format=text; x-action=sign\n"
+macro compose Y pfy     "send mail without pgp"
+macro pager   \Cu       <pipe-entry>'urlview'<enter> 'Follow links with urlview'
+
+# address book
+macro index A           "!~/scripts/abook-autoexport\n:source ~/.mutt/alias\n"          "Start abook"
+macro index \Ca         "|~/scripts/abook-autoexport --add-email-quiet\n:source ~/.mutt/alias\n" "Create new alias from the actual message"
+macro index Z           "<shell-escape>/usr/bin/offlineimap -q -o<enter>" "sync IMAP"
+#macro index \Cp        "<pipe-message>cat > ~/"                  "save message as"
+
+# sidebar
+set sidebar_delim       = '|'
+set sidebar_visible     = yes
+set sidebar_width       = 20
+color sidebar_new       brightyellow default
+bind index,pager \CN    "sidebar-next"
+bind index,pager \CP    "sidebar-prev"
+bind index,pager \CO    "sidebar-open"
