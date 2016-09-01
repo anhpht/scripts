@@ -19,46 +19,68 @@ B_RED="\[\033[1;31m\]"
 B_BLUE="\[\033[1;36m\]"
 L_BLUE="\[\033[0;36m\]"
 
-PATH=$HOME"/bin"
-PATH=$PATH:"/bin"
-PATH=$PATH":/sbin"
-PATH=$PATH":/usr/bin"
-PATH=$PATH":/usr/sbin"
-PATH=$PATH":/usr/local/bin"
-PATH=$PATH":/usr/local/sbin"
-PATH=$PATH":~/.gem/ruby/1.9.1/bin"
-PATH=$PATH":~/.gem/ruby/2.0.0/bin"
-PATH=$PATH":/usr/bin/core_perl"
-PATH=$PATH":/opt/pyshell/bin"
-
+PATH=$HOME/bin
+PATH=$PATH:/bin
+PATH=$PATH:/sbin
+PATH=$PATH:/usr/bin
+PATH=$PATH:/usr/sbin
+PATH=$PATH:/usr/local/bin
+PATH=$PATH:/usr/local/sbin
+PATH=$PATH:~/.gem/ruby/1.9.1/bin
+PATH=$PATH:~/.gem/ruby/2.0.0/bin
+PATH=$PATH:/usr/bin/core_perl
+PATH=$PATH:/opt/pyshell/bin
+PATH=$PATH:/opt/android-ndk
 export PATH
-export MANPAGER="/usr/bin/most -s"
+
+# Less Colors for Man Pages
+export LESS_TERMCAP_md=$'\e[01;31m'
+export LESS_TERMCAP_us=$'\e[01;33m'
+export LESS_TERMCAP_so=$'\e[01;44;37m'
+export LESS_TERMCAP_mb=$'\e[01;31m'
+export LESS_TERMCAP_mr=$'\e[01;35m'
+export LESS_TERMCAP_me=$'\e[00m'
+export LESS_TERMCAP_ue=$'\e[00m'
+export LESS_TERMCAP_se=$'\e[00m'
+#export MANPAGER="/usr/bin/most -s"
+export MANPAGER=less
+
+export XDG_CACHE_HOME="/run/shm/.cache"
 export LANG=en_US.UTF-8
 export EDITOR=vim
+export SHELL=/bin/bash
 
+#export OUT_DIR_COMMON_BASE=/mnt/data/dev/rk3188/build
+export JAVA_HOME=/usr/lib/jvm/default-runtime
+#export USE_CCACHE=1
+#export CCACHE_DIR=/mnt/data/build_cache
+
+alias a='ack'
 alias rm='rm -rf'
+alias ranger='~/.local/bin/ranger'
 alias ls='ls --color'
-alias l='ls -l'
+alias l='ls -l --color=auto'
 alias ll='ls -l'
 alias la='ls -Al'
 alias mkdir='mkdir -p'
 alias df='df -kTh'
 alias fn='find . ! -name "*.svn*" -name'
-alias a='ack -a'
 alias dig='dig +nocmd +noques'
 alias diff='colordiff'
 alias vd='vimdiff'
 alias ..="cd .."
-alias ssh-x='ssh -c arcfour -XC'
+#alias ssh-x='ssh -c arcfour -XC'
 alias gt='git'
 alias q="exit"
-bind '"\C-o":"\C-u ranger\C-m"'
-bind '"\C-p":"\C-u ncmpc\C-m"'
+#alias grep="grep --color=auto GREP_COLOR='0;35'"
+alias sy="JAVA_HOME=/usr/lib/jvm/java-8-jdk/jre;sy"
+#bind '"\C-o":"\C-u ranger\C-m"'
+#bind '"\C-m":"\C-u mutt\C-m"'
+bind '"\C-n":"\C-u ncmpc\C-m"'
 
 
 shopt -s cdspell
-export GREP_OPTIONS='--color=auto' GREP_COLOR='0;35'
-export CSCOPE_DB=/home/fta/cscope/oam/cscope.out
+#export GREP_OPTIONS='--color=auto' GREP_COLOR='0;35'
 if [ -e $PYSHELL_ROOT ]; then
     export PYSHELL_DEBUG=0
     export PYSHELL_ROOT=/opt/pyshell
@@ -67,17 +89,12 @@ if [ -e $PYSHELL_ROOT ]; then
 fi
 
 PS1="$B_YELLOW\u$B_GREY@$B_GREEN\h$B_BLUE: $B_RED\w$B_BLUE \n$B_BLUE($B_RED\t$B_YELLOW[$SHLVL]$B_BLUE)\$ $NORMAL"
-case `cat /etc/issue` in
-    Ubuntu*)
-        source /usr/share/autojump/autojump.bash;;
-    Arch*)
-        if [[ -f /usr/etc/profile.d/autojump.bash ]]; then
-            source /usr/etc/profile.d/autojump.bash
-        elif [[ -f /etc/profile.d/autojump.bash ]]; then
-            source /etc/profile.d/autojump.bash
-        fi;;
-    *);;
-esac
+if [[ -f /usr/etc/profile.d/autojump.bash ]]; then
+    source /usr/etc/profile.d/autojump.bash
+elif [[ -f /etc/profile.d/autojump.bash ]]; then
+    source /etc/profile.d/autojump.bash
+fi
+
 if [[ -f $HOME/.bash_completion ]]; then
     source ~/.bash_completion
 fi
@@ -89,3 +106,6 @@ fi
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 PATH=$PATH:$HOME/.gem/ruby/2.0.0/bin
+CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+source /usr/lib/z.sh
