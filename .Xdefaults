@@ -1,22 +1,23 @@
 ! General
-urxvt*perl-lib:             /usr/lib/urxvt/perl/
-urxvt*perl-ext-common:      default,matcher,searchable-scrollback,vtwheel,clipboard,keyboard-select,url-select,tabbedex
-URxvt.tabbed.new-button:    true
-URxvt.scrollBar:            false
 URxvt.scrollWithBuffer:     true
 URxvt.scrollTtyOutput:      false
 URxvt.scrollTtyKeypress:    true
+urxvt*perl-lib:             /usr/lib/urxvt/perl/
+urxvt*perl-ext-common:      default,matcher,searchable-scrollback,vtwheel,clipboard,keyboard-select,url-select
+URxvt.scrollBar:            false
+urxvt*secondaryScroll:      true
+urxvt*saveLines:            65535
+urxvt*cursorBlink:          false
+urxvt*cursorColor:          #FF0000
+urxvt*urgentOnBell:         true
 
 URxvt.keysym.M-c:           perl:clipboard:copy
 URxvt.keysym.M-v:           perl:clipboard:paste
 URxvt.keysym.M-C-v:         perl:clipboard:paste_escaped
 
-urxvt*saveLines:            65535
-urxvt*cursorBlink:          false
-urxvt*urgentOnBell:         true
-
 URxvt.keysym.M-Escape:      perl:keyboard-select:activate
 URxvt.keysym.M-s:           perl:keyboard-select:search
+
 
 URxvt.url-select.launcher:  /usr/bin/chromium
 URxvt.url-select.underline: true
@@ -29,16 +30,12 @@ URxvt.colorUL:              purple
 URxvt.colorIT:              red
 URxvt.colorBD:              #EBAC54
 
-URxvt.tabbed.title:         no
-URxvt.tabbed.tabbar-fg:     2
-URxvt.tabbed.tabbar-bg:     0
-URxvt.tabbed.tab-fg:        3
-URxvt.tabbed.tab-bg:        0
-
-URxvt.font:                 xft:Monospace:style=regular:pixelsize=15
-urxvt*cursorColor:          red
-urxvt*background:           black
-urxvt*foreground:           #00c800
+! URxvt.font:                 xft:Monospace:style=bold:pixelsize=13
+URxvt.font:                 xft:DejaVu Sans Mono:style=bold:pixelsize=12
+urxvt*background:           #181818
+urxvt*foreground:           #b0b0b0
+URxvt*backgroundPixmap:     /usr/share/terminology/backgrounds/mystic.png
+! URxvt*backgroundPixmap:     /usr/share/terminology/backgrounds/mystic.png;style=tiled
 
 ! black
 URxvt.color0:               #000000
@@ -64,3 +61,18 @@ URxvt.color14:              #00FFFF
 ! white
 URxvt.color7:               #C0C0C0
 URxvt.color15:              #FFFFFF
+
+!urxvt*loginShell:     true
+!URxvt*scrollBar_right:true
+!urxvt*override-redirect:false
+
+!URxvt.keysym.C-Up:          perl:font-size:incglobal
+!URxvt.keysym.C-Down:        perl:font-size:decglobal
+!URxvt.keysym.F11:           perl:fullscreen:switch
+
+!URxvt.tabbed.title:         no
+!URxvt.tabbed.tabbar-fg:     2
+!URxvt.tabbed.tabbar-bg:     0
+!URxvt.tabbed.tab-fg:        9
+!URxvt.tabbed.tab-bg:        0
+!,tabbedex,font-size,
