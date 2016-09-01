@@ -5,6 +5,7 @@ set noswapfile
 set incsearch
 set hlsearch
 set hid
+set mouse=r
 set laststatus=2
 set statusline=\ %F%m%r%h\ %w\ \ \ Line:\ %l/%L:%c
 set pt=<f5>
@@ -16,13 +17,16 @@ set backspace=indent,eol,start                        " Allow backspacing over e
 set ruler                                             " Show the cursor position all the time
 set clipboard=unnamed
 set showmatch                                         " Show matching brackets.
-set cursorline
 set mat=5                                             " Bracket blinking.
 set list
 set novisualbell                                      " No blinking .
 set noerrorbells                                      " No noise.
 set background=dark
-set autochdir
+
+set wildmenu
+set ttyfast
+
+setlocal fo+=aw
 filetype plugin on
 filetype indent on
 syntax on
@@ -35,7 +39,7 @@ set number
 set wrap
 set expandtab
 set shiftwidth=4
-set softtabstop=4
+set softtabstop=8
 set smarttab
 set cinoptions=:0,p0,t0
 set cinwords=if,else,while,do,for,switch,case
@@ -49,36 +53,37 @@ set lbr
 " Normal mode shortcuts
 map <right> :bn <enter>
 map <left> :bp <enter>
-map , :
+"map , :
 map <C-L> <C-W>l<C-W>_
 map <C-H> <C-W>h<C-W>_
 map <C-K> <C-W>k
 map <C-J> <C-W>j
 map T :Man <C-R><C-W><CR>
-
-nnoremap <silent> <Leader>e :Explore<CR>
+map F :cs f f<space>
+map S :cs f s<space>
 
 " Insert mode shortcuts
-inoremap <C-U> <C-G>u<C-U>
 imap ii <Esc>
 
 " Visual mode shortcuts
 vmap // y/<C-R>"<CR>
+vmap /s y:cs f s <C-R>"<CR>
+vmap /f y:cs f f <C-R>"<CR>
+vmap /g y:cs f g <C-R>"<CR>
+vmap /e y:cs f e <C-R>"<CR>
+vmap /i y:cs f i <C-R>"<CR>
+vmap /c y:cs f c <C-R>"<CR>
 
 " Plugins, tools
 let g:Tlist_Ctags_Cmd = "/usr/bin/ctags"
-set tags+=/mnt/data/tmp/omniorb/tags
 let tlist_cpp_settings = 'c++;c:class;f:function'
 map gl :TlistToggle<CR>
 
 set csprg='/usr/bin/cscope'
 runtime ftplugin/man.vim
-autocmd bufwritepost vimrc source ~/.vimrc  " When vimrc is edited, reload it!
 
 " Python
-" let g:pydoc_open_cmd = 'tabnew'
 let g:pydiction_location = '/usr/share/pydiction/complete-dict'
-map ? :Pydoc <C-R><C-W><CR>
 
 " Ranger Chooser
 fun! RangerChooser()
@@ -89,6 +94,7 @@ fun! RangerChooser()
     endif
     redraw!
 endfun
+let mapleader = ","
 map <Leader>r :call RangerChooser()<CR>
 
 " Smart Home
@@ -102,45 +108,27 @@ endfunction
 nnoremap <silent> <Home> :call SmartHome()<CR>
 inoremap <silent> <Home> <C-O>:call SmartHome()<CR>
 
-" Filetype mapping
-" au! BufNewFile,BufRead *.csv,*.tsv,*.psv setf csv
-" au BufNewFile,BufRead *.log setlocal ft=lisp
-" au BufNewFile,BufRead *.old setlocal ft=c
-" au BufNewFile,BufRead *.new setlocal ft=c
-" au BufRead /tmp/mutt-* set tw=80
-" au BufEnter * if &filetype == 'help' | :only | endif
+autocmd BufRead,BufNewFile *mutt-*   setfiletype mail
 
-" Choose the fold method depending of the file type and unfold when opening it
-" autocmd Syntax c,cpp,vim,xml,html,xhtml setlocal foldmethod=syntax
-" autocmd Syntax python setlocal foldmethod=indent
-" autocmd Syntax c,cpp,vim,xml,html,xhtml,perl,python normal zR
-
-" Autocompletion
-" autocmd FileType python set omnifunc=pythoncomplete#Complete
-" autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-" autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-" autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-" autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-" autocmd FileType c set omnifunc=ccomplete#Complete
-
-" Read .pdf .doc .docx .xls
-" autocmd BufReadPre *.pdf set ro nowrap
-" autocmd BufReadPost *.pdf silent %!pdftotext "%" -nopgbrk -layout -q -eol unix -
-" autocmd BufReadPre *.doc set ro
-" autocmd BufReadPost *.doc %!antiword "%"
-" autocmd BufReadPre *.docx set ro
-" autocmd BufReadPost *.docx %!docx2txt.pl "%" -
-
-" Compile source
-" au FileType C set makeprg=gcc\ %
-" au FileType Cpp set makeprg=g++\ %
-
-" colorscheme Darkside
-" colorscheme aqua
-colorscheme molokai
-" colorscheme holokai
-" colorscheme monokai
-" colorscheme darkZ
-" colorscheme dawn
-"  colorscheme dante
-map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+au BufRead,BufNewFile **.m set makeprg=goc\ %\ -o\ %<
+au BufRead,BufNewFile **.swift set makeprg=swiftc\ %\ -o\ %<
+au FileType c set makeprg=gcc\ %\ -o\ %<
+au FileType cpp set makeprg=g++\ %\ -o\ %<
+map <Leader>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+map <Leader>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+map <Leader>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+map <Leader>i :cs find i <C-R>=expand("<cfile>")<CR><CR>
+map <Leader>s :cs find s <C-R>=expand("<cfile>")<CR><CR>
+"colorscheme aqua
+"colorscheme molokai
+"colorscheme holokai
+"colorscheme darkZ
+"colorscheme dawn
+"colorscheme dante
+colorscheme emacs
+"colorscheme desert
+"colorscheme sorcerer
+"colorscheme solarized
+"colorscheme transparent
+"colorscheme tango2
+"set cursorline
