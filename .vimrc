@@ -110,8 +110,6 @@ inoremap <silent> <Home> <C-O>:call SmartHome()<CR>
 
 autocmd BufRead,BufNewFile *mutt-*   setfiletype mail
 
-au BufRead,BufNewFile **.m set makeprg=goc\ %\ -o\ %<
-au BufRead,BufNewFile **.swift set makeprg=swiftc\ %\ -o\ %<
 au FileType c set makeprg=gcc\ %\ -o\ %<
 au FileType cpp set makeprg=g++\ %\ -o\ %<
 map <Leader>c :cs find c <C-R>=expand("<cword>")<CR><CR>
